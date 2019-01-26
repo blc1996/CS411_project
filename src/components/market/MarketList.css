@@ -1,0 +1,11 @@
+.market-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-auto-rows: 600px;
+}
+
+.market-list .card {
+    text-align: center;
+    justify-self: center;
+    align-self: center;
+}
