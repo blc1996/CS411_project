@@ -8,6 +8,7 @@ import MarketEdit from './market/MarketEdit';
 import MarketList from './market/MarketList';
 import MarketShow from './market/MarketShow';
 import Home from './home/HomePage';
+import Chatroom from './Chatroom';
 
 const App = () => {
     return (
@@ -22,6 +23,7 @@ const App = () => {
                     <Route path="/market/edit/:id" exact component={MarketEdit} />
                     <Route path="/market/delete/:id" exact component={MarketDelete} />
                     <Route path="/market/:id" exact component={MarketShow} />
+                    <Route path="/chat" exact component={Chatroom} />
                 </Switch>
             </div>
         </Router>

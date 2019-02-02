@@ -7,7 +7,7 @@ import GoogleAuth from './GoogleAuth';
 
 class Header extends React.Component {
     state = ({popButtonStatus: 'hidden'})
-
+    
     renderPopButton = (auth) => {
         if(auth.isSignedIn){
             return (
@@ -72,6 +72,8 @@ class Header extends React.Component {
         );
     }
 };
+
+
 
 const mapStateToProps = (state) => {
     return {
