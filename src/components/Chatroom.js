@@ -17,7 +17,7 @@ class Chatroom extends React.Component {
 
     componentDidUpdate (prevProps) {
         const auth = this.props.auth;
-        // console.log(this.props.imSystem);
+        console.log(this.props.auth);
         if(auth.isSignedIn){
             if(!this.state.connect){
                 this.setState({connect: true});
@@ -27,7 +27,6 @@ class Chatroom extends React.Component {
             }
         }
         if(this.props.imSystem.connected && !this.state.subscribe){
-            console.log("here");
             this.setState({subscribe: true});
             this.props.fetchChatList(this.props.imSystem.client);
             this.props.subscribeTopic(this.props.imSystem.client, getUniqueId("114848845387331973050","109486353292950025378"))

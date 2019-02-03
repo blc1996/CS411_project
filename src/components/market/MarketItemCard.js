@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import placeHolder from '../../placeholders/book.jpeg';
 
 class MarketItemCard extends React.Component {
     render () {
@@ -9,17 +8,17 @@ class MarketItemCard extends React.Component {
             <div className="card">
             <div className="ui card">
             <div className="image">
-                <img src={placeHolder} />
+                <img src={this.props.image} />
             </div>
             <div className="content">
-                <Link to="/market/show" className="header">ECE515 Lecture Notes</Link>
+                <Link to="/market/show" className="header">{this.props.title}</Link>
                 <div className="meta">
-                <span className="date">Posted on 11:17 2/23/2019</span>
+                <span className="date">{this.props.date}</span>
                 <br/>
-                <span className="price">Listing price: $5</span>
+                <span className="price">Listing price: ${this.props.price}</span>
                 </div>
                 <div className="description">
-                This is the lecture note for ECE470/ME445
+                {this.props.description}
                 </div>
             </div>
             <div className="extra content">

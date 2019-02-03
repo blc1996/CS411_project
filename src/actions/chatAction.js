@@ -45,7 +45,6 @@ export const connectServer = id => {
             err_data = error;
         })
 
-        console.log(connected, "****");
         dispatch({
             type: "CONNECT_SERVER",
             payload: [connected, err_data, client, id]
@@ -86,6 +85,7 @@ export const publishMessage = (client, topic, message, id) => {
 }
 
 const constructMessage = (id, message) => {
+    // id and message seperated by strange string
     return id + "|@&*&@|" + message;
 }
 
