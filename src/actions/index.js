@@ -1,4 +1,7 @@
+import sqlApi from '../api/sqlServer';
+
 export const signIn = (user) => {
+    sqlApi.get(`/insertUser?id=${user.userId}&userName=${user.userName}&ImageUrl=${user.imageUrl}`); 
     return {
         type: "SIGN_IN",
         payload: user
@@ -10,3 +13,24 @@ export const signOut = () => {
         type: "SIGN_OUT"
     };
 };
+
+export const getUserInfo = (id) => {
+    return async dispatch => {
+        const response = await sqlApi.get(`/getUserInfo?id=${id}`);
+        dispatch( {
+            type: "USER_INFO",
+            payload: response.data.data[0]
+        })
+    }
+}
+
+export const searchUserByName = (username) => {
+    return async dispatch => {
+        const response = await sqlApi.get(`/searchUser?username=${username}`);
+        console.log(response);
+        dispatch( {
+            type: "USER_SEARCH",
+            payload: response.data.data[0]
+        })
+    }
+}

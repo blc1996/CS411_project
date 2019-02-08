@@ -1,7 +1,8 @@
 import React from 'react';
 import './chatroom.css';
 import { connect } from 'react-redux';
-import { connectServer, fetchChatList, publishMessage, subscribeTopic } from '../actions/chatAction'
+import { connectServer, fetchChatList, publishMessage, subscribeTopic } from '../../actions/chatAction'
+import {getUserInfo} from '../../actions';
 
 const getUniqueId = (id1, id2) => {
     // id are strings
@@ -58,6 +59,8 @@ class Chatroom extends React.Component {
             <div>
                 chat
                 <MessageList 
+                  getUserInfo = {this.props.getUserInfo}
+                  auth = {this.props.auth}
                   id = {this.state.subscribe ? this.props.auth.user.userId : 0}
                   messages={this.state.subscribe ? this.props.imSystem.chats[getUniqueId("114848845387331973050","109486353292950025378")] : [] } />
                 {this.renderForm()}
@@ -84,10 +87,14 @@ class MessageList extends React.Component {
             <ul className="message-list">
                 {this.props.messages.map((message, index) => {
                     const temp = this.messageDecode(message);
+                    const userName = this.props.auth.userInfo[temp[0]] === undefined ? temp[0] : this.props.auth.userInfo[temp[0]].username;
                     const classTitle = temp[0] === this.props.id ? "messageRight" : "messageLeft";
+                    if(this.props.auth.userInfo[temp[0]] === undefined){
+                        this.props.getUserInfo(temp[0]);
+                    }
                     return (
                       <li  key={index} className={classTitle}>
-                        <div>{temp[0]}</div>
+                        <div>{userName}</div>
                         <div>{temp[1]}</div>
                       </li>
                     )
@@ -97,4 +104,4 @@ class MessageList extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, {connectServer, fetchChatList, publishMessage, subscribeTopic})(Chatroom);
+export default connect(mapStateToProps, {getUserInfo, connectServer, fetchChatList, publishMessage, subscribeTopic})(Chatroom);

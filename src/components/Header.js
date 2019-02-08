@@ -30,6 +30,9 @@ class Header extends React.Component {
                     <Link to="/market/new" className="item">
                         New Item
                     </Link>
+                    <Link to="/chat" className="item">
+                        Chat
+                    </Link>
                     </div>
                 </div>
             );
