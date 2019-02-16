@@ -29,15 +29,15 @@ class Chatroom extends React.Component {
         }
         if(this.props.imSystem.connected && !this.state.subscribe){
             this.setState({subscribe: true});
-            this.props.fetchChatList(this.props.imSystem.client);
-            this.props.subscribeTopic(this.props.imSystem.client, getUniqueId("114848845387331973050","109486353292950025378"))
+            this.props.fetchChatList(this.props.imSystem.client, getUniqueId(this.props.auth.user.userId,this.props.match.params.id));
+            this.props.subscribeTopic(this.props.imSystem.client, getUniqueId(this.props.auth.user.userId,this.props.match.params.id))
         }
     }
 
 
     onFormSubmit = (event) => {
         event.preventDefault();
-        this.props.publishMessage(this.props.imSystem.client, getUniqueId("114848845387331973050","109486353292950025378"), this.state.term, this.props.auth.user.userId);
+        this.props.publishMessage(this.props.imSystem.client, getUniqueId(this.props.auth.user.userId,this.props.match.params.id), this.state.term, this.props.auth.user.userId);
         this.setState({term: ""});
     }
 
@@ -55,6 +55,7 @@ class Chatroom extends React.Component {
     };
 
     render () {
+        console.log(58, this.props.match.params.id);
         return (
             <div>
                 chat
@@ -62,7 +63,7 @@ class Chatroom extends React.Component {
                   getUserInfo = {this.props.getUserInfo}
                   auth = {this.props.auth}
                   id = {this.state.subscribe ? this.props.auth.user.userId : 0}
-                  messages={this.state.subscribe ? this.props.imSystem.chats[getUniqueId("114848845387331973050","109486353292950025378")] : [] } />
+                  messages={this.state.subscribe ? this.props.imSystem.chats[getUniqueId(this.props.auth.user.userId,this.props.match.params.id)] : [] } />
                 {this.renderForm()}
             </div>
         );

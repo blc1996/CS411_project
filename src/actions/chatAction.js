@@ -64,12 +64,12 @@ const getUniqueId = (id1, id2) => {
     }
 }
 
-export const fetchChatList = (client) => {
-    console.log( getUniqueId("114848845387331973050","109486353292950025378"))
-    subscribeTopic(client, getUniqueId("114848845387331973050","109486353292950025378"));
+export const fetchChatList = (client, topic) => {
+    // console.log( getUniqueId(id1,id2))
+    subscribeTopic(client, topic);
     return {
         type: "FETCT_CHAT_LIST",
-        payload: getUniqueId("114848845387331973050","109486353292950025378")
+        payload: topic
     }
 }
 
