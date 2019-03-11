@@ -17,7 +17,7 @@ export const connectServer = id => {
         }
     
         // WebSocket 连接字符串
-        const WebSocket_URL = 'ws://localhost:8083/mqtt'
+        const WebSocket_URL = 'ws://sp19-cs411-29.cs.illinois.edu:8083/mqtt'
     
         // TCP/TLS 连接字符串，仅限 Node.js 环境
         // const TCP_URL = 'mqtt://localhost:1883'

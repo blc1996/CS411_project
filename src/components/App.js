@@ -10,6 +10,8 @@ import MarketShow from './market/MarketShow';
 import Home from './home/HomePage';
 import ChatList from './chat/ChatList';
 import Chatroom from './chat/Chatroom';
+import ClassShow from './class/ClassShow'
+import ClassMainPage from './class/ClassMainPage'
 
 const App = () => {
     return (
@@ -26,6 +28,8 @@ const App = () => {
                     <Route path="/market/:id" exact component={MarketShow} />
                     <Route path="/chat" exact component={ChatList} />
                     <Route path="/chat/:id" exact component={Chatroom} />
+                    <Route path="/class" exact component={ClassMainPage} />
+                    <Route path="/class/:id" exact component={ClassShow} />
                 </Switch>
             </div>
         </Router>

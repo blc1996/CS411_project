@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {changeTab} from '../actions/headerAction';
+import history from '../history';
 
 import GoogleAuth from './GoogleAuth';
 
 class Header extends React.Component {
-    state = ({popButtonStatus: 'hidden'})
+    state = ({popButtonStatus: 'hidden', tern: ""})
     
     renderPopButton = (auth) => {
         if(auth.isSignedIn){
@@ -39,6 +40,10 @@ class Header extends React.Component {
         }
     };
 
+    searchClass = () => {
+        this.props.changeTab(2);
+        history.push(`/class/:${this.state.term}`);
+    }
 
     render() {
         return (
@@ -55,19 +60,29 @@ class Header extends React.Component {
                 >
                     Market
                 </Link>
-                <a 
+                <Link to="/class"
                     className={this.props.tabs[2]}
                     onClick={() => {this.props.changeTab(2)}}
                 >
                     Classes
-                </a>
+                </Link>
                 <div className="right menu">
                     <GoogleAuth />
                     {this.renderPopButton(this.props.auth)}
                     <div className="item">
                         <div className="ui transparent icon input">
-                            <input type="text" placeholder="Search for classes" />
-                            <i className="search link icon"></i>
+                            <input 
+                                placeholder="Search for classes" 
+                                value={this.state.term}
+                                onChange={(e) => this.setState({ term: e.target.value })} 
+                                onClick={(e) => this.setState({ term: e.target.value })} 
+                                onKeyUp={event => {
+                                    // console.log("here", event.key);
+                                    if(event.key === "Enter"){
+                                    this.searchClass();
+                                }}}
+                            />
+                            <i className="search link icon" onClick={this.searchClass}></i>
                         </div>
                     </div>
                 </div>

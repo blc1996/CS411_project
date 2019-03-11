@@ -55,8 +55,23 @@ router.get('/getUserInfo', ctx => {
   })
 })
 
+router.get('/getCourseInfo', ctx => {
+  return new Promise(resolve => {
+    // let name = ctx.query.name;
+    const sql = `SELECT * FROM test.gpa where Subject = '${ctx.query.Subject}' and Number = ${ctx.query.Number}`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      ctx.body = {
+        code: 200,
+        data: result
+      }
+      resolve();
+    })
+  })
+})
+
 //record new users
-router.get('/insertUser', ctx => {
+router.post('/insertUser', ctx => {
   return new Promise(resolve => {
     const query = ctx.query;
     const sql = `INSERT INTO test.users(id, userName, ImageUrl)
@@ -102,7 +117,7 @@ router.get('/searchUser', ctx => {
 })
 
 //post a new item
-router.get('/insertItem', ctx => {
+router.post('/insertItem', ctx => {
   return new Promise(resolve => {
     const query = ctx.query;
     const sql = `INSERT INTO test.new_table(id, creater, image, description, price, create_time, title)
