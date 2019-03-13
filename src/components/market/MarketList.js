@@ -32,6 +32,7 @@ class MarketList extends React.Component {
     renderList = () => {
         return this.state.list.map(item => {
             return <MarketItemCard
+                key={item.id}
                 image={item.image}
                 description={item.description}
                 date={item.date}

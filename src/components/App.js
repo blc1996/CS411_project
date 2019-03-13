@@ -10,8 +10,9 @@ import MarketShow from './market/MarketShow';
 import Home from './home/HomePage';
 import ChatList from './chat/ChatList';
 import Chatroom from './chat/Chatroom';
-import ClassShow from './class/ClassShow'
-import ClassMainPage from './class/ClassMainPage'
+import ClassShow from './class/ClassShow';
+import ClassMainPage from './class/ClassMainPage';
+import ClassCommentCreate from './class/ClassCommentCreate';
 
 const App = () => {
     return (
@@ -30,6 +31,7 @@ const App = () => {
                     <Route path="/chat/:id" exact component={Chatroom} />
                     <Route path="/class" exact component={ClassMainPage} />
                     <Route path="/class/:id" exact component={ClassShow} />
+                    <Route path="/class/:id/addComment" exact component={ClassCommentCreate} />
                 </Switch>
             </div>
         </Router>
