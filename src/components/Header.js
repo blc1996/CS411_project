@@ -42,7 +42,7 @@ class Header extends React.Component {
 
     searchClass = () => {
         this.props.changeTab(2);
-        history.push(`/class/:${this.state.term}`);
+        history.push(`/class/${this.state.term}`);
     }
 
     render() {

@@ -55,6 +55,40 @@ router.get('/getUserInfo', ctx => {
   })
 })
 
+
+// get course comment
+router.get('/getCourseComment', ctx => {
+  return new Promise(resolve => {
+    let query = ctx.query;
+    const sql = `SELECT * FROM test.comment where courseid = '${query.courseid}'`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      ctx.body = {
+        code: 200,
+        data: result
+      }
+      resolve();
+    })
+  })
+})
+
+// post course course comment
+router.post('/insertComment', ctx => {
+  return new Promise(resolve => {
+    let query = ctx.query;
+    const sql = `INSERT INTO test.comment(user, time, difficulty, workload, comment, title, courseid)
+    VALUES('${query.user}', '${query.time}', '${query.difficulty}', '${query.workload}', '${query.comment}', '${query.title}', '${query.courseid}')`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      ctx.body = {
+        code: 200,
+        msg: `insert data to fe_frame success!`
+      }
+      resolve();
+    })
+  })
+})
+
 router.get('/getCourseInfo', ctx => {
   return new Promise(resolve => {
     // let name = ctx.query.name;
