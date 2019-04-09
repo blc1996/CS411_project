@@ -26,10 +26,13 @@ class Header extends React.Component {
         
                     <div className="divider"></div>
                     <div className="header">
-                        Post
+                        Menu
                     </div>
                     <Link to="/market/new" className="item">
-                        New Item
+                        Post new Item
+                    </Link>
+                    <Link to={`/market/private/${this.props.auth.user.userId}`} className="item">
+                        Manage my items
                     </Link>
                     <Link to="/chat" className="item">
                         Chat

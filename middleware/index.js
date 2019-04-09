@@ -104,8 +104,50 @@ router.get('/getCourseInfo', ctx => {
   })
 })
 
+//delete a market item
+router.post('/deleteItem', ctx => {
+  return new Promise(resolve => {
+    const sql = `DELETE FROM test.new_table WHERE (id = '${ctx.query.id}');`
+    connection.query(sql, (err) => {
+      if (err){
+        ctx.body = {
+          cde: 400,
+          msg: err
+        }
+      }else{
+        ctx.body = {
+          cde: 200,
+          msg: `Delete item successful`
+        }
+      }
+      resolve();
+    })
+  })
+})
+
+
+router.post('/editItem', ctx => {
+  return new Promise(resolve => {
+    const sql = `UPDATE test.new_table SET image = '${ctx.query.image}', description = '${ctx.query.description}', price = '${ctx.query.price}', title = '${ctx.query.title}' WHERE (id = '${ctx.query.id}');`
+    connection.query(sql, (err) => {
+      if (err){
+        ctx.body = {
+          cde: 400,
+          msg: err
+        }
+      }else{
+        ctx.body = {
+          cde: 200,
+          msg: `edit item successful`
+        }
+      }
+      resolve();
+    })
+  })
+})
+
 //record new users
-router.post('/insertUser', ctx => {
+router.get('/insertUser', ctx => {
   return new Promise(resolve => {
     const query = ctx.query;
     const sql = `INSERT INTO test.users(id, userName, ImageUrl)

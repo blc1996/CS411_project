@@ -11,7 +11,7 @@ class ImageUpload extends React.Component {
         super(props);
     
         this.state = {
-          uploadedFileCloudinaryUrl: ''
+          uploadedFileCloudinaryUrl: this.props.meta.initial === undefined ? "" : this.props.meta.initial
         };
 
         console.log(this.props);
@@ -80,7 +80,7 @@ class ImageUpload extends React.Component {
                 <div>
                     {this.state.uploadedFileCloudinaryUrl === '' ? null :
                     <div>
-                    <p>{this.state.uploadedFile.name}</p>
+                    {/* <p>{this.state.uploadedFile.name}</p> */}
                     <a className="ui medium image">
                         <img src={this.state.uploadedFileCloudinaryUrl} />
                     </a>

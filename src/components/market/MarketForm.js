@@ -6,6 +6,7 @@ import ImageUpload from './ImageUpload';
 
 class MarketForm extends React.Component {
     errorHandle ({ error, touched}) {
+        console.log(this.props)
         if(touched && error){
             return (
                 <div className="ui error message" >
@@ -69,7 +70,7 @@ const formWrapped = reduxForm({
 })(MarketForm);
 
 const mapStateToProps = state => {
-    return {userId: state.auth.userId};
+    return {userId: state.auth.user};
 }
 
 export default connect(mapStateToProps, {})(formWrapped);

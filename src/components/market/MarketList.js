@@ -6,7 +6,7 @@ import NevigationBar from '../NevigationBar';
 import Filter from '../Filter';
 
 import {changeTab} from '../../actions/headerAction';
-import {fetchItems} from '../../actions/marketAction';
+import {fetchItems, deleteItem, editItem} from '../../actions/marketAction';
 
 class MarketList extends React.Component {
     state = ({page: 1, list: []});
@@ -29,21 +29,32 @@ class MarketList extends React.Component {
         }
     }
 
+    deleteAction = async (id) => {
+        this.props.deleteItem(id);
+    }
+
     renderList = () => {
         return this.state.list.map(item => {
+            var createrFlag = false;
+            if(this.props.userId !== null && item.creater === this.props.userId.userId){
+                createrFlag = true;
+            }
             return <MarketItemCard
                 key={item.id}
+                id={item.id}
                 image={item.image}
                 description={item.description}
                 date={item.date}
                 price={item.price}
                 title={item.title}
+                createrFlag={createrFlag}
+                deleteAction={this.deleteAction}
+                editAction={this.editAction}
             />
         })
     }
 
     render () {
-        console.log(this.state.list);
         return (
             <div>
                 <Filter />
@@ -58,8 +69,9 @@ class MarketList extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        marketList: state.marketList
+        marketList: state.marketList,
+        userId: state.auth.user
     }
 }
 
-export default connect(mapStateToProps, {changeTab, fetchItems})(MarketList);
+export default connect(mapStateToProps, {changeTab, fetchItems, deleteItem, editItem})(MarketList);
