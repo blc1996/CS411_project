@@ -23,7 +23,7 @@ class MarketShow extends React.Component {
         return (
             <div>
                 <div className="ui segment">
-                <img className="ui centered medium image" src={this.state.item.image} alt="https://lh3.googleusercontent.com/-I0NGbJlOA9Q/AAAAAAAAAAI/AAAAAAAAAcM/CqWtoeNgmUs/s96-c/photo.jpg" />
+                <img className="ui centered medium image" src={this.state.item.image} alt="placeholder" />
                 <p>title: {this.state.item.title}</p>
                 <p>price: {this.state.item.price}</p>
                 <p>description: {this.state.item.description}</p>

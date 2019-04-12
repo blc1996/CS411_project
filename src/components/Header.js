@@ -18,7 +18,7 @@ class Header extends React.Component {
                     className={`ui dropdown icon item ${this.state.popButtonStatus}`}
                     tabIndex="0"
                 >
-                    <i className="wrench icon"></i>
+                    <i className="large blue wrench icon"></i>
                     <div className={`menu transition ${this.state.popButtonStatus}`} tabIndex="-1">
                     <div className="item">
                         {`Welcome ${auth.user.userName}`}
@@ -29,10 +29,10 @@ class Header extends React.Component {
                         Menu
                     </div>
                     <Link to="/market/new" className="item">
-                        Post new Item
+                        Post new item
                     </Link>
-                    <Link to={`/market/private/${this.props.auth.user.userId}`} className="item">
-                        Manage my items
+                    <Link to={`/`} className="item">
+                        Manage my account
                     </Link>
                     <Link to="/chat" className="item">
                         Chat
@@ -42,6 +42,12 @@ class Header extends React.Component {
             );
         }
     };
+
+    renderAuth = () => {
+        if(this.props.auth.isSignedIn){
+            return <GoogleAuth />;
+        }
+    }
 
     searchClass = () => {
         this.props.changeTab(2);
@@ -70,7 +76,7 @@ class Header extends React.Component {
                     Classes
                 </Link>
                 <div className="right menu">
-                    <GoogleAuth />
+                    {this.renderAuth()}
                     {this.renderPopButton(this.props.auth)}
                     <div className="item">
                         <div className="ui transparent icon input">
