@@ -27,7 +27,7 @@ const App = () => {
                     <Route path="/market/edit/:id" exact component={MarketEdit} />
                     <Route path="/market/delete/:id" exact component={MarketDelete} />
                     <Route path="/market/private/:id" exact component={MarketList} />
-                    <Route path="/market/:id" exact component={MarketShow} />
+                    <Route path="/market/show/:id" exact component={MarketShow} />
                     <Route path="/chat" exact component={ChatList} />
                     <Route path="/chat/:id" exact component={Chatroom} />
                     <Route path="/class" exact component={ClassMainPage} />

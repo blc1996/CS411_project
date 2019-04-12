@@ -9,3 +9,8 @@
     justify-self: center;
     align-self: center;
 }
+
+.market-list .card .image {
+    height: 275px;
+    overflow: hidden;
+}

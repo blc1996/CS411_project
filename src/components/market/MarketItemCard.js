@@ -28,12 +28,12 @@ class MarketItemCard extends React.Component {
     render () {
         return (
             <div className="card">
-            <div className="ui card">
+            <div className="ui centered fluid card">
             <div className="image">
                 <img src={this.props.image} alt="item"/>
             </div>
             <div className="content">
-                <Link to="/market/show" className="header">{this.props.title}</Link>
+                <Link to={`/market/show/${this.props.id}`} className="header">{this.props.title}</Link>
                 <div className="meta">
                 <span className="date">{this.props.date}</span>
                 <br/>

@@ -43,7 +43,7 @@ export const editItem = (formValue, id) => {
 
 export const fetchItems = (page) => {
     return async dispatch => {
-        const response = await sqlApi.get("/select");
+        const response = await sqlApi.get("/fetchItems");
 
         console.log(response.data.data)
 
