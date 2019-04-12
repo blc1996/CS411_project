@@ -19,15 +19,28 @@ connection.connect(err => {
   console.log('mysql connncted success!');
 })
 
+var current_max_item_id = 0;
+connection.query("SELECT MAX(id) FROM test.new_table", (err, result) => {
+  if(err) throw err;
+  current_max_item_id = result['0']['MAX(id)'];
+  console.log("Market Id starting from: ", current_max_item_id);
+})
+
+
+
+
 router.get('/', ctx => {
   console.log(ctx)
   ctx.body = 'Visit index';
 })
 
+/***************************************
+    Market Segment
+***************************************/
+
 // get the whole market table, modify name later
-router.get('/select', ctx => {
+router.get('/fetchItems', ctx => {
   return new Promise(resolve => {
-    let name = ctx.query.name;
     const sql = `SELECT * FROM test.new_table`;
     connection.query(sql, (err, result) => {
       if (err) throw err;
@@ -40,9 +53,88 @@ router.get('/select', ctx => {
   })
 })
 
+// get the whole market table, modify name later
+router.get('/fetchItem', ctx => {
+  return new Promise(resolve => {
+    const sql = `SELECT * FROM test.new_table WHERE id = ${ctx.query.id}`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      ctx.body = {
+        code: 200,
+        data: result
+      }
+      resolve();
+    })
+  })
+})
+
+//post a new item
+router.post('/insertItem', ctx => {
+  return new Promise(resolve => {
+    const query = ctx.query;
+    const sql = `INSERT INTO test.new_table(id, creater, image, description, price, create_time, title)
+    VALUES( NULL , '${query.creater}', '${query.image}', '${query.description}', '${query.price}', '${query.create_time}', '${query.title}')`;
+    connection.query(sql, (err) => {
+      if (err) throw err;
+      ctx.body = {
+        cde: 200,
+        msg: `insert data to new_table success! '${query.id}', '${query.creater}', '${query.image}', '${query.description}', '${query.price}', '${query.create_time}'`
+      }
+      resolve();
+    })
+  })
+})
+
+//delete a market item
+router.post('/deleteItem', ctx => {
+  return new Promise(resolve => {
+    const sql = `DELETE FROM test.new_table WHERE (id = '${ctx.query.id}');`
+    connection.query(sql, (err) => {
+      if (err){
+        ctx.body = {
+          cde: 400,
+          msg: err
+        }
+      }else{
+        ctx.body = {
+          cde: 200,
+          msg: `Delete item successful`
+        }
+      }
+      resolve();
+    })
+  })
+})
+
+
+router.post('/editItem', ctx => {
+  return new Promise(resolve => {
+    const sql = `UPDATE test.new_table SET image = '${ctx.query.image}', description = '${ctx.query.description}', price = '${ctx.query.price}', title = '${ctx.query.title}' WHERE (id = '${ctx.query.id}');`
+    connection.query(sql, (err) => {
+      if (err){
+        ctx.body = {
+          cde: 400,
+          msg: err
+        }
+      }else{
+        ctx.body = {
+          cde: 200,
+          msg: `edit item successful`
+        }
+      }
+      resolve();
+    })
+  })
+})
+
+
+
+/***************************************
+    Course Segment
+***************************************/
+
 router.get('/getUserInfo', ctx => {
   return new Promise(resolve => {
-    let name = ctx.query.name;
     const sql = `SELECT * FROM test.users where id = '${ctx.query.id}'`;
     connection.query(sql, (err, result) => {
       if (err) throw err;
@@ -104,47 +196,10 @@ router.get('/getCourseInfo', ctx => {
   })
 })
 
-//delete a market item
-router.post('/deleteItem', ctx => {
-  return new Promise(resolve => {
-    const sql = `DELETE FROM test.new_table WHERE (id = '${ctx.query.id}');`
-    connection.query(sql, (err) => {
-      if (err){
-        ctx.body = {
-          cde: 400,
-          msg: err
-        }
-      }else{
-        ctx.body = {
-          cde: 200,
-          msg: `Delete item successful`
-        }
-      }
-      resolve();
-    })
-  })
-})
 
-
-router.post('/editItem', ctx => {
-  return new Promise(resolve => {
-    const sql = `UPDATE test.new_table SET image = '${ctx.query.image}', description = '${ctx.query.description}', price = '${ctx.query.price}', title = '${ctx.query.title}' WHERE (id = '${ctx.query.id}');`
-    connection.query(sql, (err) => {
-      if (err){
-        ctx.body = {
-          cde: 400,
-          msg: err
-        }
-      }else{
-        ctx.body = {
-          cde: 200,
-          msg: `edit item successful`
-        }
-      }
-      resolve();
-    })
-  })
-})
+/***************************************
+    User Segment
+***************************************/
 
 //record new users
 router.get('/insertUser', ctx => {
@@ -192,22 +247,7 @@ router.get('/searchUser', ctx => {
   })
 })
 
-//post a new item
-router.post('/insertItem', ctx => {
-  return new Promise(resolve => {
-    const query = ctx.query;
-    const sql = `INSERT INTO test.new_table(id, creater, image, description, price, create_time, title)
-    VALUES( NULL , '${query.creater}', '${query.image}', '${query.description}', '${query.price}', '${query.create_time}', '${query.title}')`;
-    connection.query(sql, (err) => {
-      if (err) throw err;
-      ctx.body = {
-        cde: 200,
-        msg: `insert data to new_table success! '${query.id}', '${query.creater}', '${query.image}', '${query.description}', '${query.price}', '${query.create_time}'`
-      }
-      resolve();
-    })
-  })
-})
+
 
 app.use(koaCors());
 app.use(router.routes());
