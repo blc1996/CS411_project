@@ -1,7 +1,7 @@
 import sqlApi from '../api/sqlServer';
 
 export const signIn = (user) => {
-    sqlApi.get(`/insertUser?id=${user.userId}&userName=${user.userName}&ImageUrl=${user.imageUrl}`); 
+    sqlApi.get(`/insertUser?id=${user.userId}&userName=${user.userName}&ImageUrl=${user.imageUrl}&email=${user.email}`); 
     return {
         type: "SIGN_IN",
         payload: user

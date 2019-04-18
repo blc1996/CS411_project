@@ -7,7 +7,7 @@ import history from '../history';
 import GoogleAuth from './GoogleAuth';
 
 class Header extends React.Component {
-    state = ({popButtonStatus: 'hidden', tern: ""})
+    state = ({popButtonStatus: 'hidden', term: ""})
     
     renderPopButton = (auth) => {
         if(auth.isSignedIn){
@@ -43,11 +43,11 @@ class Header extends React.Component {
         }
     };
 
-    renderAuth = () => {
-        if(this.props.auth.isSignedIn){
-            return <GoogleAuth />;
-        }
-    }
+    // renderAuth = () => {
+    //     if(this.props.auth.isSignedIn){
+    //         return <GoogleAuth />;
+    //     }
+    // }
 
     searchClass = () => {
         this.props.changeTab(2);
@@ -76,7 +76,8 @@ class Header extends React.Component {
                     Classes
                 </Link>
                 <div className="right menu">
-                    {this.renderAuth()}
+                    {/* {this.renderAuth()} */}
+                    <GoogleAuth />
                     {this.renderPopButton(this.props.auth)}
                     <div className="item">
                         <div className="ui transparent icon input">

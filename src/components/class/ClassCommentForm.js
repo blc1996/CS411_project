@@ -69,7 +69,7 @@ const formWrapped = reduxForm({
 })(ClassCommentForm);
 
 const mapStateToProps = state => {
-    return {userId: state.auth.userId};
+    return {userId: state.auth.user.userId};
 }
 
 export default connect(mapStateToProps, {})(formWrapped);

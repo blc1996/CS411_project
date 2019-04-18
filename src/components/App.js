@@ -8,6 +8,7 @@ import MarketEdit from './market/MarketEdit';
 import MarketList from './market/MarketList';
 import MarketShow from './market/MarketShow';
 import Home from './home/HomePage';
+import SignUpPage from './home/SignUpPage'
 import ChatList from './chat/ChatList';
 import Chatroom from './chat/Chatroom';
 import ClassShow from './class/ClassShow';
@@ -22,6 +23,7 @@ const App = () => {
                 <Header />
                 <Switch>
                     <Route path="/" exact component={Home} />
+                    <Route path="/signup" exact component={SignUpPage} />
                     <Route path="/market" exact component={MarketList} />
                     <Route path="/market/new" exact component={MarketCreate} />
                     <Route path="/market/edit/:id" exact component={MarketEdit} />

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import '../../../node_modules/react-vis/dist/style.css';
 import {RadialChart} from 'react-vis';
 import sqlApi from '../../api/sqlServer';
@@ -31,16 +32,13 @@ class ClassShow extends Component {
         const id = this.props.match.params.id;
         var Subject = id.match(/[a-z|A-Z]+/gi)[0] === null ? "":  id.match(/[a-z|A-Z]+/gi)[0].toUpperCase();
         var Number = id.match(/\d+$/gi) === null ? 0 : id.match(/\d+$/gi)[0];
-        console.log(Subject, Number);
         const response = await sqlApi.get(`/getCourseInfo?Subject=${Subject}&Number=${Number}`);
         const comments = await sqlApi.get(`/getCourseComment?courseid=${Subject}${Number}`);
-        console.log(comments);
         const data = response.data.data;
         if(data.length === 0){
             this.setState({loading: 2});
             return;
         }
-        console.log(data);
         const total = this.dataMapping(data); 
         this.setState({courseInfo: data, loading: false, overall: total, Subject: data[0].Subject, Number: data[0].Number, id: Subject+Number, comments: comments.data.data});
     }
@@ -170,7 +168,7 @@ class ClassShow extends Component {
         return (
             <div>
                 <h1>{this.state.Subject+this.state.Number}</h1>
-                <a href={`/class/${this.state.id}/addComment`} class="ui blue button">Add a Comment</a>
+                <Link to={`/class/${this.state.id}/addComment`} class="ui blue button">Add a Comment</Link>
                 <div className="ui top attached tabular menu">
                     <a className={`item ${tabs[0]}`} data-tab="GPA" onClick={() => {this.setState({tabState: [1, 0, 0]})}} >GPA</a>
                     <a className={`item ${tabs[1]}`} data-tab="Comments" onClick={() => {this.setState({tabState: [0, 1, 0]})}} >Comments</a>

@@ -6,7 +6,7 @@ import ImageUpload from './ImageUpload';
 
 class MarketForm extends React.Component {
     errorHandle ({ error, touched}) {
-        console.log(this.props)
+        // console.log(this.props)
         if(touched && error){
             return (
                 <div className="ui error message" >
@@ -34,7 +34,7 @@ class MarketForm extends React.Component {
     }
 
     render () {
-        console.log(this.props);
+        // console.log(this.props);
         return (
             <form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui form error" >
                 <Field name="picture" component={ImageUpload} label="Upload a picture for your item:" />

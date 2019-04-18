@@ -15,7 +15,7 @@ class ClassCommentCreate extends React.Component {
     }
 
     onSubmit = async (formValues, userId) => {
-        console.log(this.props);
+        console.log(userId);
         if(userId === undefined){
             userId = "Anounymous"
         }
