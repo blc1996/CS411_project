@@ -75,6 +75,12 @@ class Header extends React.Component {
                 >
                     Classes
                 </Link>
+                <Link to="/chat"
+                    className={this.props.tabs[3]}
+                    onClick={() => {this.props.changeTab(3)}}
+                >
+                    Chat
+                </Link>
                 <div className="right menu">
                     {/* {this.renderAuth()} */}
                     <GoogleAuth />

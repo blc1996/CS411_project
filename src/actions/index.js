@@ -17,6 +17,9 @@ export const signOut = () => {
 export const getUserInfo = (id) => {
     return async dispatch => {
         const response = await sqlApi.get(`/getUserInfo?id=${id}`);
+        if(response.data.data[0] === undefined){
+            return;
+        }
         dispatch( {
             type: "USER_INFO",
             payload: response.data.data[0]

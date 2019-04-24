@@ -4,12 +4,13 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const koaCors = require('koa-cors');
 const mysql = require('mysql');
+const util = require('util');
 
 const app = new Koa();
 const router = new Router();
 
 const connection = mysql.createConnection({
-  host: 'localhost', // 填写你的mysql host
+  host: '172.22.148.161', // 填写你的mysql host
   user: 'root', // 填写你的mysql用户名
   password: '123456' // 填写你的mysql密码
 })
@@ -18,6 +19,8 @@ connection.connect(err => {
   if(err) throw err;
   console.log('mysql connncted success!');
 })
+
+connection.query = util.promisify(connection.query);
 
 var current_max_item_id = 0;
 connection.query("SELECT MAX(id) FROM test.new_table", (err, result) => {
@@ -307,10 +310,11 @@ router.get('/insertUser', ctx => {
   return new Promise(resolve => {
     const query = ctx.query;
     console.log(query);
-    const sql = `INSERT INTO test.users(id, userName, ImageUrl, email)
-    VALUES('${query.id}', '${query.userName}', '${query.ImageUrl}', '${query.email}')`;
+    const sql = `INSERT INTO test.users(id, userName, ImageUrl, email, password)
+    VALUES('${query.id}', '${query.userName}', '${query.ImageUrl}', '${query.email}', '123456')`;
     connection.query(sql, (err) => {
       if (err){
+        console.log("error in inserting user: ", err);
         ctx.body = {
           cde: 400,
           msg: err
@@ -349,6 +353,108 @@ router.get('/searchUser', ctx => {
   })
 })
 
+
+/***************************************
+    Chat Segment
+***************************************/
+
+//subscribe a topic
+router.post('/subscribeTopic', ctx => {
+  return new Promise(resolve => {
+    const query = ctx.query;
+    const sql = `INSERT INTO mqtt.mqtt_sub(clientid, topic, qos)
+    VALUES('${query.id}', '${query.topic}', 1)`;
+    connection.query(sql, (err, result) => {
+      if (err){
+        ctx.body = {
+          cde: 400,
+          msg: "subscribe failed!"
+        }
+      }else{
+        ctx.body = {
+          cde: 200,
+          data: result
+        }
+      }
+      resolve();
+    })
+  })
+})
+
+//fetch chat list
+//http://localhost:9999/fetchChatList?id=114848845387331973050
+router.get('/fetchChatList', (ctx) => {
+  return new Promise(resolve => {
+    const query = ctx.query;
+    const sql = `SELECT topic FROM mqtt.mqtt_sub WHERE clientid=${query.id}`;
+    connection.query(sql, async (err, result) => {
+      if (err){
+        ctx.body = {
+          cde: 400,
+          msg: []
+        }
+        resolve();
+      }else{
+        const IDs = result.map(item => {
+          return item['topic']
+        })
+        console.log(IDs);
+        var ret = [];
+        for(var i = 0; i < IDs.length; i++){
+          var id;
+          if(IDs[i].substr(0,21) === query.id){
+            id = IDs[i].substr(21,42);
+          }else{
+            id = IDs[i].substr(0,21);
+          }
+          const sql2 = `SELECT * FROM test.users WHERE id=${id}`;
+          var userInfo;
+          try{
+            userInfo = await connection.query(sql2);
+          }catch(err){
+            continue;
+          }
+          ret.push(userInfo['0']);
+        }
+        console.log(ret);
+        ctx.body = {
+          cde: 200,
+          msg: ret
+        }
+        resolve();
+      }
+    })
+  })
+})
+
+
+// fetch all the subscribed chat content
+router.get('/fetchChatContent', ctx => {
+  return new Promise(resolve => {
+    const query = ctx.query;
+    const sql = `SELECT CONVERT(payload USING utf8) FROM mqtt.mqtt_msg WHERE topic=${query.topic}`;
+    connection.query(sql, (err, result) => {
+      if (err){
+        ctx.body = {
+          cde: 400,
+          msg: "No such topic"
+        }
+        resolve();
+      }else{
+        result = result.map(item => {
+          const splited = item['CONVERT(payload USING utf8)'].split("|@&*&@|");
+          return {sender: splited[0], message: splited[1]};
+        })
+        ctx.body = {
+          cde: 200,
+          data: result
+        }
+        console.log(result);
+      }
+      resolve();
+    })
+  })
+})
 
 
 app.use(koaCors());

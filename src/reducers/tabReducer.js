@@ -1,5 +1,5 @@
-const INITIAL_STATE = ["item active", "item", "item"];
-const template = ["item", "item", "item"];
+const INITIAL_STATE = ["item active", "item", "item", "item"];
+const template = ["item", "item", "item", "item"];
 
 export default (state = INITIAL_STATE, action) => {
     if(action.type === "CHANGE_TAB"){

@@ -1,6 +1,8 @@
 import mqtt from 'mqtt';
+import sqlApi from '../api/sqlServer';
 
 export const connectServer = id => {
+    console.log(id);
     return async (dispatch) => {
         const options = {
             // timeout 
@@ -8,7 +10,7 @@ export const connectServer = id => {
         
             // 认证信息
             clientId: id,
-            // username: 'emqx',
+            username: id,
             // password: 'emqx',
         
             // 心跳时间
@@ -45,6 +47,15 @@ export const connectServer = id => {
             err_data = error;
         })
 
+        client.on('message', (topic, message, packet) => {
+            const received = message.toString();
+            console.log('收到来自', topic, '的消息:', message.toString(), "packet:", packet);
+            dispatch({
+                type: "UPDATE_CHAT",
+                payload: {topic, message: received}
+            })
+        })
+
         dispatch({
             type: "CONNECT_SERVER",
             payload: [connected, err_data, client, id]
@@ -55,26 +66,37 @@ export const connectServer = id => {
     }
 }
 
-const getUniqueId = (id1, id2) => {
-    // id are strings
-    if(id1 > id2){
-        return id2+id1;
-    }else{
-        return id1+id2;
+
+export const fetchChatList = (id) => {
+    return async dispatch => {
+        const response = await sqlApi.get(`/fetchChatList?id=${id}`);
+        console.log(response.data.msg);
+        if(response.status === 200){
+            dispatch( {
+                type: "FETCT_CHAT_LIST",
+                payload: response.data.msg
+            });
+        }
     }
 }
 
-export const fetchChatList = (client, topic) => {
-    // console.log( getUniqueId(id1,id2))
-    subscribeTopic(client, topic);
-    return {
-        type: "FETCT_CHAT_LIST",
-        payload: topic
+export const fetchChatContent = (topic, id) => {
+    return async dispatch => {
+        const response = await sqlApi.get(`/fetchChatContent?topic=${topic}`);
+        if(response.status === 200){
+            dispatch( {
+                type: "FETCH_CHAT_CONTENT",
+                payload: [topic, response.data.data]
+            });
+        }
     }
 }
 
 export const publishMessage = (client, topic, message, id) => {
-    client.publish(topic, constructMessage(id, message), (err) => {
+    var options={
+        retain:true,
+        qos:1};
+    client.publish(topic, constructMessage(id, message), options, (err) => {
         console.log(err || '发布成功');
     })
 
@@ -96,14 +118,6 @@ export const subscribeTopic = (client, topic) => {
 
            
             console.log(client, "******", topic)
-            client.on('message', (topic, message) => {
-                console.log('收到来自', topic, '的消息:', message.toString());
-                const received = message.toString();
-                dispatch({
-                    type: "UPDATE_CHAT",
-                    payload: {topic, message: received}
-                })
-            })
             
 
         })

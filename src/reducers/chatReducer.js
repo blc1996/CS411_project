@@ -1,5 +1,9 @@
+import sqlApi from '../api/sqlServer';
+import { stat } from 'fs';
+
 const INITIAL_STATE = {
     chats: {},
+    chatList: [],
     client: null,
     error: null,
     connected: false,
@@ -8,17 +12,20 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
     if(action.type === "FETCT_CHAT_LIST"){
-        // need to be modified
-        // console.log(action.payload, "*&%*&^*&^*&^"); 
-        return {...state, chats: {...state["chats"], [action.payload]: [] } }
+        return {...state, chatList: action.payload};
     }else if(action.type === "FETCH_CHAT_CONTENT"){
-        
+        const topic = action.payload[0];
+        const chatContent = action.payload[1];
+        return {...state, chats: {...state.chats, [topic] : chatContent}};
     }else if(action.type === "CREATE_CHAT"){
         
     }else if(action.type === "PUBLISH_MESSAGE"){
         const temp = {...state};
-        console.log(temp.chats);
-        temp.chats[action.payload.topic].push(action.payload.message);
+        const placeHolder = action.payload.message.split("|@&*&@|");
+        if(temp.chats[action.payload.topic] === undefined){
+            temp.chats[action.payload.topic] = [];
+        }
+        temp.chats[action.payload.topic].push({sender: placeHolder[0], message: placeHolder[1]});
         return temp;
     }else if(action.type === "SUBSCRIBE_TOPIC"){
         
@@ -26,13 +33,15 @@ export default (state = INITIAL_STATE, action) => {
         return {...state, client: action.payload[2], error: action.payload[1], connected: action.payload[0], id: action.payload[3] }
     }else if(action.type === "UPDATE_CHAT"){
         const message = decodeMessage(action.payload.message);
-        console.log(message);
-        console.log(state);
         if(message[0] === state.id){
             return state;
         }
+        // sqlApi.delete('')
         const temp = {...state};
-        temp.chats[action.payload.topic].push(action.payload.message);
+        if(temp.chats[action.payload.topic] === undefined){
+            temp.chats[action.payload.topic] = [];
+        }
+        temp.chats[action.payload.topic].push({sender: message[0], message: message[1]});
         return temp; 
     }
     return state;

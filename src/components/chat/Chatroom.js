@@ -1,8 +1,10 @@
 import React from 'react';
 import './chatroom.css';
 import { connect } from 'react-redux';
-import { connectServer, fetchChatList, publishMessage, subscribeTopic } from '../../actions/chatAction'
+import { connectServer, fetchChatContent, publishMessage } from '../../actions/chatAction'
 import {getUserInfo} from '../../actions';
+import {changeTab} from '../../actions/headerAction';
+
 
 const getUniqueId = (id1, id2) => {
     // id are strings
@@ -14,23 +16,31 @@ const getUniqueId = (id1, id2) => {
 }
 
 class Chatroom extends React.Component {
-    state = {connect: false, subscribe: false, term: ""};
+    state = { term: "", contentLoaded: false, topic: ""};
+
+    componentDidMount (){
+        this.props.changeTab(3);
+        if(!this.state.contentLoaded && this.props.auth.isSignedIn && this.props.imSystem.connected){
+            this.setState({contentLoaded: true});
+            this.props.fetchChatContent(this.state.topic, this.props.match.params.id);
+        }
+    }
 
     componentDidUpdate (prevProps) {
         const auth = this.props.auth;
-        console.log(this.props.auth);
         if(auth.isSignedIn){
-            if(!this.state.connect){
-                this.setState({connect: true});
+            if(this.state.topic === ""){
+                this.setState({topic: getUniqueId(this.props.auth.user.userId, this.props.match.params.id)});
+            }
+            if(!this.state.connect && !this.props.imSystem.connected){
                 const id = auth.user.userId;
-                // console.log("here", id);
                 this.props.connectServer(id);
+                this.setState({connect: true});
             }
         }
-        if(this.props.imSystem.connected && !this.state.subscribe){
-            this.setState({subscribe: true});
-            this.props.fetchChatList(this.props.imSystem.client, getUniqueId(this.props.auth.user.userId,this.props.match.params.id));
-            this.props.subscribeTopic(this.props.imSystem.client, getUniqueId(this.props.auth.user.userId,this.props.match.params.id))
+        if(!this.state.contentLoaded && auth.isSignedIn && this.props.imSystem.connected){
+            this.setState({contentLoaded: true});
+            this.props.fetchChatContent(this.state.topic, this.props.match.params.id);
         }
     }
 
@@ -55,15 +65,14 @@ class Chatroom extends React.Component {
     };
 
     render () {
-        console.log(58, this.props.match.params.id);
         return (
             <div>
                 chat
                 <MessageList 
                   getUserInfo = {this.props.getUserInfo}
                   auth = {this.props.auth}
-                  id = {this.state.subscribe ? this.props.auth.user.userId : 0}
-                  messages={this.state.subscribe ? this.props.imSystem.chats[getUniqueId(this.props.auth.user.userId,this.props.match.params.id)] : [] } />
+                  id = {this.props.auth.isSignedIn ? this.props.auth.user.userId : 0}
+                  messages={this.props.imSystem.chats[this.state.topic] === undefined ? [] : this.props.imSystem.chats[this.state.topic] } />
                 {this.renderForm()}
             </div>
         );
@@ -87,7 +96,7 @@ class MessageList extends React.Component {
         return (
             <ul className="message-list">
                 {this.props.messages.map((message, index) => {
-                    const temp = this.messageDecode(message);
+                    const temp = [message.sender, message.message];
                     const userName = this.props.auth.userInfo[temp[0]] === undefined ? temp[0] : this.props.auth.userInfo[temp[0]].username;
                     const classTitle = temp[0] === this.props.id ? "messageRight" : "messageLeft";
                     if(this.props.auth.userInfo[temp[0]] === undefined){
@@ -105,4 +114,4 @@ class MessageList extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, {getUserInfo, connectServer, fetchChatList, publishMessage, subscribeTopic})(Chatroom);
+export default connect(mapStateToProps, {changeTab, getUserInfo, connectServer, fetchChatContent, publishMessage})(Chatroom);
