@@ -70,7 +70,6 @@ export const connectServer = id => {
 export const fetchChatList = (id) => {
     return async dispatch => {
         const response = await sqlApi.get(`/fetchChatList?id=${id}`);
-        console.log(response.data.msg);
         if(response.status === 200){
             dispatch( {
                 type: "FETCT_CHAT_LIST",
@@ -114,12 +113,8 @@ const constructMessage = (id, message) => {
 export const subscribeTopic = (client, topic) => {
     return async dispatch => {
         client.subscribe(topic, (err) => {
-            console.log(err || '订阅成功')
-
-           
+            console.log(err || '订阅成功')         
             console.log(client, "******", topic)
-            
-
         })
 
         dispatch({
@@ -128,3 +123,16 @@ export const subscribeTopic = (client, topic) => {
         })
     }
 }
+
+export const clearNotification = (client, topic, id) => {
+    var options={
+        retain:true,
+        qos:1};
+    client.publish(topic, "", options, (err) => {
+        console.log(err || 'retain eliminated');
+    })
+    return {
+        type: "CLEAR_NOTIFICATION",
+        payload: id
+    };
+};

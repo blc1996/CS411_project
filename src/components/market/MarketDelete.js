@@ -5,21 +5,17 @@ import Modal from '../Modal'
 import history from '../../history'
 
 import {deleteItem} from '../../actions/marketAction';
-import {changeTab} from '../../actions/headerAction';
 
 
 class MarketDelete extends React.Component {
     id = history.location.pathname.split('/')[3];
 
-    componentDidMount () {
-        this.props.changeTab(1);
-    }
-
     actions () {
+        console.log(history)
         return (
             <React.Fragment>
                 <button 
-                    onClick={() => this.props.deleteItem(this.id)}
+                    onClick={() => {this.props.deleteItem(this.id); history.goBack()}}
                     className="ui primary button" 
                 >
                     Delete
@@ -55,4 +51,4 @@ class MarketDelete extends React.Component {
     };  
 };
 
-export default connect(null, {deleteItem, changeTab})(MarketDelete);
+export default connect(null, {deleteItem})(MarketDelete);

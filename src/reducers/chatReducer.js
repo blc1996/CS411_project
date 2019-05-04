@@ -3,6 +3,7 @@ import { stat } from 'fs';
 
 const INITIAL_STATE = {
     chats: {},
+    notify: {},
     chatList: [],
     client: null,
     error: null,
@@ -13,10 +14,12 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     if(action.type === "FETCT_CHAT_LIST"){
         return {...state, chatList: action.payload};
+
     }else if(action.type === "FETCH_CHAT_CONTENT"){
         const topic = action.payload[0];
         const chatContent = action.payload[1];
         return {...state, chats: {...state.chats, [topic] : chatContent}};
+
     }else if(action.type === "CREATE_CHAT"){
         
     }else if(action.type === "PUBLISH_MESSAGE"){
@@ -27,6 +30,7 @@ export default (state = INITIAL_STATE, action) => {
         }
         temp.chats[action.payload.topic].push({sender: placeHolder[0], message: placeHolder[1]});
         return temp;
+
     }else if(action.type === "SUBSCRIBE_TOPIC"){
         
     }else if(action.type === "CONNECT_SERVER"){
@@ -36,13 +40,17 @@ export default (state = INITIAL_STATE, action) => {
         if(message[0] === state.id){
             return state;
         }
-        // sqlApi.delete('')
         const temp = {...state};
         if(temp.chats[action.payload.topic] === undefined){
             temp.chats[action.payload.topic] = [];
         }
         temp.chats[action.payload.topic].push({sender: message[0], message: message[1]});
-        return temp; 
+        temp.notify[message[0]] = true;
+        return temp;
+        
+    }else if(action.type === "CLEAR_NOTIFICATION"){
+        const notify = {...state.notify, [action.payload]: false}
+        return {...state, notify}
     }
     return state;
 };

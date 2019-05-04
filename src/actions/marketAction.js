@@ -23,7 +23,6 @@ export const deleteItem = (id) => {
                 payload: id
             });
         }
-        history.push('/market');
     }
 };
 

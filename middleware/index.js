@@ -63,10 +63,10 @@ router.get('/fetchItems', ctx => {
   })
 })
 
-// get the whole market table, modify name later
-router.get('/fetchItem', ctx => {
+// get all items posted by a user
+router.get('/fetchUserItems', ctx => {
   return new Promise(resolve => {
-    const sql = `SELECT * FROM test.new_table WHERE id = ${ctx.query.id}`;
+    const sql = `SELECT * FROM test.new_table WHERE creater = ${ctx.query.id}`;
     connection.query(sql, (err, result) => {
       if (err) throw err;
       ctx.body = {
@@ -186,10 +186,26 @@ router.get('/getCourseComment', ctx => {
   })
 })
 
+// get all items posted by a user
+router.get('/getUserComments', ctx => {
+  return new Promise(resolve => {
+    const sql = `SELECT * FROM test.comment WHERE user = ${ctx.query.id}`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      ctx.body = {
+        code: 200,
+        data: result
+      }
+      resolve();
+    })
+  })
+})
+
 // post course course comment
 router.post('/insertComment', ctx => {
   return new Promise(resolve => {
     let query = ctx.query;
+    console.log(query.user);
     const sql = `INSERT INTO test.comment(user, time, difficulty, workload, comment, title, courseid)
     VALUES('${query.user}', '${query.time}', '${query.difficulty}', '${query.workload}', '${query.comment}', '${query.title}', '${query.courseid}')`;
     connection.query(sql, (err, result) => {

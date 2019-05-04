@@ -40,19 +40,20 @@ html, body {
     margin: 15px 0;
 }
 
-.messageRight div:nth-child(1) {
+/* .messageRight div:nth-child(1) {
     font-size: 11px;
     color: var(--main-text-color);
     opacity: 0.9;
     margin-bottom: 6px;
-}
-.messageRight div:nth-child(2) {
+    float: right;
+} */
+.messageRight div:nth-child(1) {
     background: green;
     color: var(--secondary-color);
     display: inline;
     padding: 4px 8px;
     border-radius: 8px;
-    /* float: right; */
+    float: right;
 }
 
 .messageRight-list {
@@ -69,13 +70,13 @@ html, body {
     margin: 15px 0;
 }
 
-.messageLeft div:nth-child(1) {
+/* .messageLeft div:nth-child(1) {
     font-size: 11px;
     color: var(--main-text-color);
     opacity: 0.9;
     margin-bottom: 6px;
-}
-.messageLeft div:nth-child(2) {
+} */
+.messageLeft div:nth-child(1) {
     background: var(--main-color);
     color: var(--secondary-color);
     display: inline;

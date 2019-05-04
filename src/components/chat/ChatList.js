@@ -51,6 +51,12 @@ class ChatList extends React.Component {
         // history.push(`/chat/${userInfo.id}`);
     }
 
+    renderNotification = (flag) =>{
+        if(flag){
+            return <i className="bell icon"></i>;
+        }
+    }
+
     renderList = () => {
         if(this.props.auth.isSignedIn && !this.state.chatLoaded){
             this.getChatList();
@@ -62,6 +68,7 @@ class ChatList extends React.Component {
             return (
                 <div className="item">
                     <div className="right floated content">
+                    {this.renderNotification(this.props.imSystem.notify[chat.id])}
                     <div className="ui button">Delete</div>
                     </div>
                     <img className="ui avatar image" src={chat.ImageUrl}/>
