@@ -21,9 +21,9 @@ class GoogleAuth extends React.Component {
             var userName = this.auth.currentUser.get().getBasicProfile().getName();
             var userId = this.auth.currentUser.get().getId();
             var imageUrl = this.auth.currentUser.get().getBasicProfile().getImageUrl();
-            var email = this.auth.currentUser.get().getBasicProfile().getEmail();
-            console.log(this.auth.currentUser.get().getBasicProfile())
-            this.props.signIn({userId:userId, userName:userName, imageUrl:imageUrl, email: email});
+            console.log(imageUrl);
+            this.props.signIn({userId:userId, userName:userName, imageUrl:imageUrl});
+            console.log(this.auth);
         }else{
             this.props.signOut();
         }
@@ -36,14 +36,13 @@ class GoogleAuth extends React.Component {
 
     onSignOutClick = () => {
         this.auth.signOut();
-        this.props.signOut();
     }
 
     renderAuthButton() {
         if(this.props.isSignedIn) {
             return (
                 <div>
-                    <button className="ui fluid large red button" onClick={this.onSignOutClick} >
+                    <button className="ui fluid large red google button" onClick={this.onSignOutClick} >
                     <i className="google icon" />
                         Sign out
                     </button>

@@ -26,14 +26,7 @@ connection.query("SELECT MAX(id) FROM test.new_table", (err, result) => {
   console.log("Market Id starting from: ", current_max_item_id);
 })
 
-var max_userID = 90000000000;
-connection.query(`SELECT MAX(id) FROM test.users`, (err, result) => {
-  if(err) throw err;
-  max_userID = result['0']['MAX(id)'];
-  console.log(max_userID)
-  max_userID = Number(max_userID.slice(10, 21));
-  console.log(max_userID)
-})
+
 
 
 router.get('/', ctx => {
@@ -78,21 +71,9 @@ router.get('/fetchItem', ctx => {
 //post a new item
 router.post('/insertItem', ctx => {
   return new Promise(resolve => {
-    // get current time
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date+' '+time;
-    // get info of inserting user
-    var userName = "";
-    var email = "";
-    
-
-
-    console.log(dateTime);
     const query = ctx.query;
     const sql = `INSERT INTO test.new_table(id, creater, image, description, price, create_time, title)
-    VALUES( NULL , '${query.creater}', '${query.image}', '${query.description}', '${query.price}', '${dateTime}', '${query.title}')`;
+    VALUES( NULL , '${query.creater}', '${query.image}', '${query.description}', '${query.price}', '${query.create_time}', '${query.title}')`;
     connection.query(sql, (err) => {
       if (err) throw err;
       ctx.body = {
@@ -220,95 +201,12 @@ router.get('/getCourseInfo', ctx => {
     User Segment
 ***************************************/
 
-//user sign up
-router.post('/signUpUser', ctx => {
-  return new Promise(resolve => {
-    const query = ctx.query;
-    //first, check if the email has already been signed up
-    connection.query(`SELECT COUNT(id) FROM test.users WHERE email='${query.email}'`, (err, result) => {
-      if(err) {
-        console.log(err);
-        throw err;}
-      const count = result['0']['COUNT(id)'];
-      if(count !== 0){
-        ctx.body = {
-          cde: 400,
-          msg: "email already in use!"
-        }
-        resolve();
-      }else{
-        // generate a unique id, 21 digits
-        // const current_userID = query.id === "NULL" ? ++max_userID : query.id;
-        console.log(max_userID)
-        max_userID = max_userID + 1;
-        console.log(max_userID)
-        const ImageUrl = "https://res.cloudinary.com/dsrkgfv4x/image/upload/v1549593676/aph5hno3tovc3yisusfx.jpg";
-        // query to insert
-        const sql = `INSERT INTO test.users(id, userName, ImageUrl, email, password)
-          VALUES('9999999999${max_userID.toString()}', '${query.userName}', '${ImageUrl}', '${query.email}', '${query.password}')`;
-        connection.query(sql, (err) => {
-          if (err){
-            console.log(err)
-            ctx.body = {
-              cde: 400,
-              msg: "unknown errer"
-            }
-          }else{
-            ctx.body = {
-              cde: 200,
-              msg: `insert data to fe_frame success! '${query.id}', '${query.userName}', '${query.ImageUrl}'`
-            }
-          }
-          resolve();
-        })
-      }
-    })
-  })
-})
-
-//record new users
-router.get('/loginUser', ctx => {
-  return new Promise(resolve => {
-    const query = ctx.query;
-    console.log(query);
-    const sql = `SELECT * FROM test.users WHERE email='${query.email}'`;
-    connection.query(sql, (err, result) => {
-      if (err){
-        ctx.body = {
-          cde: 400,
-          msg: err
-        }
-        resolve();
-      }else{
-        console.log(result['0']);
-        console.log(result['0']['id']);
-        if(query.password === result['0']['password']){
-          console.log("good!!")
-          ctx.body = {
-            cde: 200,
-            msg: {userName: result['0']['username'], userId: result['0']['id'], imageUrl: result['0']['ImageUrl']}
-          }
-          resolve();
-        }else{
-          console.log("bad!!", query.password, result['0']['password']);
-          ctx.body = {
-            cde: 400,
-            msg: `wrong passwaord!`
-          }
-          resolve();
-        }
-      }
-    })
-  })
-})
-
 //record new users
 router.get('/insertUser', ctx => {
   return new Promise(resolve => {
     const query = ctx.query;
-    console.log(query);
-    const sql = `INSERT INTO test.users(id, userName, ImageUrl, email)
-    VALUES('${query.id}', '${query.userName}', '${query.ImageUrl}', '${query.email}')`;
+    const sql = `INSERT INTO test.users(id, userName, ImageUrl)
+    VALUES('${query.id}', '${query.userName}', '${query.ImageUrl}')`;
     connection.query(sql, (err) => {
       if (err){
         ctx.body = {
@@ -336,7 +234,7 @@ router.get('/searchUser', ctx => {
       if (err){
         ctx.body = {
           cde: 400,
-          msg: "user not found!"
+          msg: err
         }
       }else{
         ctx.body = {

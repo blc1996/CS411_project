@@ -57,7 +57,7 @@ class MarketList extends React.Component {
     render () {
         return (
             <div>
-                <Filter func={this.filterFuc} />
+                <Filter />
                 <div className="market-list" >
                     {this.renderList()}
                 </div>

@@ -1,39 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import UserPanel from '../UserPanel';
 
 import GoogleAuth from '../GoogleAuth';
 
 import {changeTab} from '../../actions/headerAction';
-import {signIn} from '../../actions'
-
-import sqlApi from '../../api/sqlServer';
 
 class HomePage extends React.Component {
-    state = {password: "", email: ""}
-
     componentDidMount () {
         this.props.changeTab(0);
-    }
-
-    onLogin = async () =>{
-        console.log("here", this.state.email, this.state.password);
-        const response = await sqlApi.get(`/loginUser?email=${this.state.email}&password=${this.state.password}`);
-        console.log(response);
-        if(response.data.cde === 200){
-            const user = {...response.data.msg, email: this.state.email};
-            console.log(user);
-            this.props.signIn(user);
-        }
-    }
-
-    handleEmailChange = (event) => {
-        this.setState({email: event.target.value});
-    }
-    
-    handlePasswordChange = (event) => {
-        this.setState({password: event.target.value});
     }
 
 
@@ -57,23 +32,23 @@ class HomePage extends React.Component {
                         <div className="field">
                         <div className="ui left icon input">
                             <i className="user icon"></i>
-                            <input type="text" name="email" placeholder="E-mail address" value={this.state.email} onChange={this.handleEmailChange} />
+                            <input type="text" name="email" placeholder="E-mail address"/>
                         </div>
                         </div>
                         <div className="field">
                         <div className="ui left icon input">
                             <i className="lock icon"></i>
-                            <input type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handlePasswordChange}/>
+                            <input type="password" name="password" placeholder="Password"/>
                         </div>
                         </div>
-                        <div className="ui fluid large blue submit button" onClick={this.onLogin}>Login</div>
+                        <div className="ui fluid large blue submit button">Login</div>
                     </div>
                     <div className="ui error message"></div>
                     </form>
                     <GoogleAuth />
 
                     <div className="ui message">
-                    New to us? <Link to="/signup">Sign Up</Link>
+                    New to us? <a href="#">Sign Up</a>
                     </div>
                 </div>
                 </div>
@@ -103,4 +78,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {changeTab, signIn})(HomePage);
+export default connect(mapStateToProps, {changeTab})(HomePage);

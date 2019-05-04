@@ -29,7 +29,7 @@ export const deleteItem = (id) => {
 
 export const editItem = (formValue, id) => {
     return async dispatch => {
-        const response = await sqlApi.post(`/editItem?id=${id}&image=${formValue.picture}&description=${formValue.description}&price=${formValue.price}&title=${formValue.title}`)
+        const response = await sqlApi.post(`/editItem?id=${id}&image=${formValue.picture}&description=${formValue.description}&price=${formValue.price}&create_time=2019-02-02%2000:00:00&title=${formValue.title}`)
         console.log(response)
         if(response.status === 200){
             dispatch( {
