@@ -8,6 +8,21 @@ import './ClassComment.css';
 class ClassCommentCreate extends React.Component {
     state = {id: ""};
 
+    Months = {
+        0: "Jan",
+        1: "Feb",
+        2: "Mar",
+        3: "Apr",
+        4: "May",
+        5: "June",
+        6: "July",
+        7: "Aug",
+        8: "Sept",
+        9: "Ocu",
+        10: "Nov",
+        11: "Dec",
+    } //emulated enum for months
+
     componentDidMount (){
         const id = this.props.match.params.id;
         var Subject = id.match(/[a-z|A-Z]+/gi)[0] === null ? "":  id.match(/[a-z|A-Z]+/gi)[0].toUpperCase();
@@ -19,7 +34,9 @@ class ClassCommentCreate extends React.Component {
         if(userId === undefined){
             userId = "Anounymous"
         }
-        const response = await sqlApi.post(`/insertComment?user=${userId}&courseid=${this.state.id}&time=today&difficulty=${formValues.difficulty}&workload=${formValues.workload}&title=${formValues.title}&comment=${formValues.comment}`);
+        const date = new Date().getDate();
+        const month = new Date().getMonth();
+        const response = await sqlApi.post(`/insertComment?user=${userId}&courseid=${this.state.id}&time=${`${this.Months[month]}. ${date}`}&difficulty=${formValues.difficulty}&workload=${formValues.workload}&title=${formValues.title}&comment=${formValues.comment}`);
         history.push(`/class/${this.state.id}`);
     }
 
