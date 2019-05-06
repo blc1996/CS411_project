@@ -250,10 +250,9 @@ class ClassMainPage extends Component {
         return (
             <div className="canvas-wrapper">
                 <div className="attention-segment">
-                  <div className = "ui placeholder segment">                   
-                    <i className = {`top-right big ${iconName} icon`} />
-                    <h3>Use search bar on the top right for a specific class!</h3>                                                 
-                  </div>
+                <h3 class="ui block header">
+                    Use search bar on the top right for a specific class!
+                </h3>
                 </div> 
               <div className = "ui placeholder segment">                  
                 <div className="canvas-example-controls">

@@ -22,7 +22,7 @@ class ClassCommentCreate extends React.Component {
         }
         const response = await sqlApi.post(`/insertComment?user=${userId}&courseid=${this.state.id}&time=today&difficulty=${formValues.difficulty}&workload=${formValues.workload}&title=${formValues.title}&comment=${formValues.comment}`);
         console.log(response);
-        history.push(`/class/${this.state.id}`);
+        history.push(`/class/${this.state.id}`);         
     }
 
     render () {
