@@ -15,10 +15,10 @@ class MarketDelete extends React.Component {
         return (
             <React.Fragment>
                 <button 
-                    onClick={() => {this.props.deleteItem(this.id); history.goBack()}}
+                    onClick={() => {this.props.deleteItem(this.id); history.push('/market')}}
                     className="ui primary button" 
                 >
-                    Deletefe
+                    Delete
                 </button>
                 <button 
                     onClick={() => history.push('/market')} 

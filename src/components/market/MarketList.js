@@ -7,10 +7,11 @@ import Filter from '../Filter';
 
 import {changeTab} from '../../actions/headerAction';
 import {getItems, fetchItems, deleteItem, editItem} from '../../actions/marketAction';
+import sqlApi from '../../api/sqlServer'
 
 class MarketList extends React.Component {
 
-    state = ({page: 0, dataList: [], mark:0, title:""});
+    state = ({page: 0, dataList: [], mark:0, title:"", size:0});
 
 //     fetch = async () => {
     //     const response = await listApi.get("/select");
@@ -21,12 +22,22 @@ class MarketList extends React.Component {
     componentDidMount () {
         this.props.changeTab(1);
         this.props.getItems(0);
+        sqlApi.get(`/getSize`).then(res => {
+            const tempItem = res.data.data[0] === undefined ? {} : res.data.data[0];
+            this.setState({size: tempItem.SIZE});
+            console.log(this.state.size);
+        })
     }
 
     componentDidUpdate (prevProps) {
         if(prevProps.marketList !== this.props.marketList){
             console.log(this.props.marketList.data);
             this.setState({dataList: this.props.marketList.data})
+            sqlApi.get(`/fetchSize?title=${this.state.title}`).then(res => {
+                const tempItem = res.data.data[0] === undefined ? {} : res.data.data[0];
+                this.setState({size: tempItem.SIZE});
+                console.log(this.state.size);
+            })
         }
     }
 
@@ -48,7 +59,7 @@ class MarketList extends React.Component {
                 date={item.date}
                 price={item.price}
                 title={item.title}
-                createrFlag={createrFlag}
+                createrFlag={false}
                 deleteAction={this.deleteAction}
                 editAction={this.editAction}
             />
@@ -74,7 +85,7 @@ class MarketList extends React.Component {
                 <div className="market-list" >
                     {this.renderList()}
                 </div>
-                <NevigationBar Mark = {this.state.mark} Title={this.state.title}/>
+                <NevigationBar Mark = {this.state.mark} Size={this.state.size} Title ={this.state.title}/>
             </div>
         );
     } 

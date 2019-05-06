@@ -5,6 +5,7 @@ import sqlApi from '../api/sqlServer'
 import MarketItemCard from '../components/market/MarketItemCard'
 import ClassCommentCard from '../components/class/ClassCommentCard'
 import { connect } from 'react-redux';
+import { addItem } from '../actions/marketAction'
 
 class UserPanel extends React.Component {
     state = {itemList: [], commentList: [], tab: [1, 0]};
@@ -18,6 +19,9 @@ class UserPanel extends React.Component {
         const commentList = await sqlApi.get(`/getUserComments?id=${this.props.auth.user.userId}`);
         this.setState({itemList: itemList.data.data, commentList: commentList.data.data});
         console.log(this.state.itemList, this.state.commentList);
+        this.state.itemList.map(item => {
+            this.props.addItem(item);
+        })
     }
 
     renderContent = () => {
@@ -82,5 +86,5 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {})(UserPanel);
+export default connect(mapStateToProps, {addItem})(UserPanel);
 

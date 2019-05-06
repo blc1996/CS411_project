@@ -89,22 +89,16 @@ class ClassMainPage extends Component {
 
       async initialize() {
         const id =  (this.state.course === null) || (this.state.course === undefined) ? 'CS225' : this.state.course;
-        console.log(id);
         var Subject = id.match(/[a-z|A-Z]+/gi)[0] === null ? "":  id.match(/[a-z|A-Z]+/gi)[0].toUpperCase();
         var Number = id.match(/\d+$/gi) === null ? 0 : id.match(/\d+$/gi)[0];
-        console.log(Subject, Number);
         const response = await sqlApi.get(`/getCourseInfo?Subject=${Subject}&Number=${Number}`);
-        const comments = await sqlApi.get(`/getCourseComment?courseid=${Subject}${Number}`);
-        // console.log(comments);
         const data = response.data.data;
         if(data.length === 0){
             this.setState({loading: 2});
             return;
         }
-        console.log(data);
         const total = this.dataMapping(data); 
         const reFill = this.getData(total);
-        console.log(reFill);
         this.setState({name: id, data: reFill});
     }
 
@@ -227,6 +221,7 @@ class ClassMainPage extends Component {
     componentDidMount () {
         console.log(this.props.match.params.id);
         this.props.changeTab(2);
+        this.initialize();
         // this.submit();
     }
 
@@ -324,11 +319,10 @@ class ClassMainPage extends Component {
             </div>
 
             <div className="canvas-wrapper">
-                <div className="attention-segment">
-                <div className = "ui placeholder segment">                   
-                    <i className = {`top-right big ${iconName} icon`} />
-                    <h3>Use search bar on the top right for a specific class!</h3>                                                 
-                </div>
+                <div className="attention-segment">               
+                <h3 class="ui block header">
+                    Use search bar on the top right for a specific class!
+                </h3>                                             
             </div> 
            
             <div className = "ui placeholder segment">                  

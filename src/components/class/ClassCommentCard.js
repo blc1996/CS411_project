@@ -22,7 +22,7 @@ class ClassCommentCard extends React.Component {
             </div>
             <div className="extra content">
                 <i className="check icon"></i>
-                121 Votes
+                2 Votes
             </div>
             </div>
         )

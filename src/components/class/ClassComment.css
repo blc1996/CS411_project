@@ -20,4 +20,21 @@
     top: 100px;
 }
 
+.card-display {
+    display: inline-block;
+    height: 300px;
+    margin-right: 50px;
+    margin-top: 20px;
+}
+
+.content {
+    display: inline-block;
+    height: 250px;
+}
+
+.extra-content {
+    /* display: inline-block; */
+    text-align:center;
+    height: 50px;
+}
 
