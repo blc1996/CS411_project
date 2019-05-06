@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../../../node_modules/react-vis/dist/style.css';
-import {RadialChart} from 'react-vis';
 import sqlApi from '../../api/sqlServer';
 import {changeTab} from '../../actions/headerAction';
 import ClassCommentCard from './ClassCommentCard';
@@ -30,17 +29,18 @@ function getRandomData() {
 
   const colorRanges = {
     typeA: ['#59E4EC', '#0D676C'],
-    typeB: ['#EFC1E3', '#B52F93']
+    typeB: ['#EFC1E3', '#B52F93'],
+    typeC: ['#c9d358', '#d6e246'],
+    typeD: ['#66d668', '#55d657'],
+    typeE: ['#58bfd8', '#40b2ce']
   };
   
   const nextType = {
     typeA: 'typeB',
-    typeB: 'typeA'
-  };
-  
-  const nextModeContent = {
-    canvas: 'SWITCH TO SVG',
-    svg: 'SWITCH TO CANVAS'
+    typeB: 'typeC',
+    typeC: 'typeD',
+    typeD: 'typeE',
+    typeE: 'typeA'
   };
   
   const drawModes = ['canvas', 'svg'];
@@ -48,7 +48,7 @@ function getRandomData() {
 
 class ClassShow extends Component {
     state = {tabState: [1, 0, 0], courseInfo: [], loading: 1, figure: [], teacherSelectionBar: false, comments: [], drawMode: 0,
-        figure: randomData,  colorType: 'typeB',
+        data: randomData,  colorType: 'typeA',
         value: false}; 
     //loading: 0=successful, 1=loading, 2=no such course
 
@@ -73,10 +73,10 @@ class ClassShow extends Component {
         const id = this.props.match.params.id;
         var Subject = id.match(/[a-z|A-Z]+/gi)[0] === null ? "":  id.match(/[a-z|A-Z]+/gi)[0].toUpperCase();
         var Number = id.match(/\d+$/gi) === null ? 0 : id.match(/\d+$/gi)[0];
-        console.log(Subject, Number);
+        // console.log(Subject, Number);
         const response = await sqlApi.get(`/getCourseInfo?Subject=${Subject}&Number=${Number}`);
         const comments = await sqlApi.get(`/getCourseComment?courseid=${Subject}${Number}`);
-        console.log(comments);
+        // console.log(comments);
         const data = response.data.data;
         if(data.length === 0){
             this.setState({loading: 2});
@@ -85,110 +85,113 @@ class ClassShow extends Component {
         console.log(data);
         const total = this.dataMapping(data); 
         const reFill = this.getData(total);
-        this.setState({courseInfo: data, loading: false, figure: total, Subject: data[0].Subject, Number: data[0].Number, id: Subject+Number, comments: comments.data.data, figure: reFill});
+        console.log(reFill);
+        this.setState({courseInfo: data, loading: false, overall: total, Subject: data[0].Subject, Number: data[0].Number, id: Subject+Number, comments: comments.data.data, data: reFill});
     }
 
     getData = (total) => {
+
         return (
-            {
-                x: 14 - total[0].subLabel,
-                y: total[0].angle,
-                size: total[0].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[1].subLabel,
-                y: total[1].angle,
-                size: total[1].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[2].subLabel,
-                y: total[2].angle,
-                size: total[2].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[3].subLabel,
-                y: total[3].angle,
-                size: total[3].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[4].subLabel,
-                y: total[4].angle,
-                size: total[4].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[5].subLabel,
-                y: total[5].angle,
-                size: total[5].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[6].subLabel,
-                y: total[6].angle,
-                size: total[6].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[7].subLabel,
-                y: total[7].angle,
-                size: total[7].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[8].subLabel,
-                y: total[8].angle,
-                size: total[8].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[9].subLabel,
-                y: total[9].angle,
-                size: total[9].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[10].subLabel,
-                y: total[10].angle,
-                size: total[10].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[11].subLabel,
-                y: total[11].angle,
-                size: total[11].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[12].subLabel,
-                y: total[12].angle,
-                size: total[12].angle * 10,
-                color: 10,
-                opacity: 1000
-            },
-            {
-                x: 14 - total[13].subLabel,
-                y: total[13].angle,
-                size: total[13].angle * 10,
-                color: 10,
-                opacity: 1000
-            }
-        
+            [
+                {
+                    x: 'W',
+                    y: total[13].angle,
+                    size: total[13].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'F',
+                    y: total[12].angle,
+                    size: total[12].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'D-',
+                    y: total[11].angle,
+                    size: total[11].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'D',
+                    y: total[10].angle,
+                    size: total[10].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'D+',
+                    y: total[9].angle,
+                    size: total[9].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                }, 
+                {
+                    x: 'C-',
+                    y: total[8].angle,
+                    size: total[8].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'C',
+                    y: total[7].angle,
+                    size: total[7].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'C+',
+                    y: total[6].angle,
+                    size: total[6].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'B-',
+                    y: total[5].angle,
+                    size: total[5].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'B',
+                    y: total[4].angle,
+                    size: total[4].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'B+',
+                    y: total[3].angle,
+                    size: total[3].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'A-',
+                    y: total[2].angle,
+                    size: total[2].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'A',
+                    y: total[1].angle,
+                    size: total[1].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                },
+                {
+                    x: 'A+',
+                    y: total[0].angle,
+                    size: total[0].angle * 10,
+                    color: Math.random() * 10,
+                    opacity: Math.random() * 0.5 + 0.5
+                }
+            ]
         );
       }
 
@@ -245,7 +248,7 @@ class ClassShow extends Component {
                     onClick={() => {
                         const total = this.mapSpecificTeacherData(teacher);
                         const reFill = this.getData(total);
-                        this.setState({figure: total, figure: reFill})
+                        this.setState({overall: total, figure: reFill})
                     }}>
                     {teacher}
                 </div>
@@ -294,17 +297,17 @@ class ClassShow extends Component {
             };
 
             const mode = drawModes[drawMode];
-
             return (                
             <div className="r">
                 {this.teacherSelectDropDown()}
                 <div className="canvas-wrapper">
-                    <div>{`MODE: ${mode}`}</div>
+                    <h3>{`Grades Distribution`}</h3>
                     <XYPlot
+                        xType = "ordinal"
                         data = {this.state.figure}
-                        onMouseLeave={() => this.setState({value: false})}
-                        width={600}
-                        height={300}
+                        onMouseLeave={() => this.setState({value: false, colorType: nextType[colorType]})}
+                        width={1100}
+                        height={500}
                     >
                         <VerticalGridLines />
                         <HorizontalGridLines />
@@ -314,6 +317,7 @@ class ClassShow extends Component {
                         {mode === 'svg' && <MarkSeries {...markSeriesProps} />}
                         {this.state.value ? <Hint value={this.state.value} /> : null}
                     </XYPlot>
+                    <div>{`The more the students in this level, the larger the radius is`}</div>
                 </div>
                 
             </div>

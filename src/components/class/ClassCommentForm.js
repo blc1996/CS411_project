@@ -2,6 +2,7 @@ import React from 'react';
 import ScoreInput from './ScoreInput';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import './ClassComment.css';
 
 class ClassCommentForm extends React.Component {
     errorHandle ({ error, touched}) {
@@ -35,13 +36,17 @@ class ClassCommentForm extends React.Component {
 
     render () {
         return (
-            <form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui form error" >
-                <Field name="difficulty" component={ScoreInput} label="Please Indicate Difficulty level:" />
-                <Field name="workload" component={ScoreInput} label="Please Indicate Workload:" />
-                <Field name="title" component={this.renderInput} label="Enter Title:"/>
-                <Field name="comment" component={this.renderInput} label="Enter your comment :):"/>
-                <button className="ui button primary" >Submit</button>
-            </form>
+            <div className="value-form">
+                <form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui form error" >
+                    <Field name="difficulty" component={ScoreInput} label="Please Indicate Difficulty level:" />
+                    <Field name="workload" component={ScoreInput} label="Please Indicate Workload:" />
+                    <Field name="title" component={this.renderInput} label="Enter Title:"/>
+                    <Field name="comment" component={this.renderInput} label="Enter your comment :):"/>
+                    <button className="ui button primary" >Submit</button>
+                </form>
+                <i className = {`massive ${"pencil alternate"} icon`} />
+            </div>
+            
         );
     } 
 };
@@ -49,16 +54,16 @@ class ClassCommentForm extends React.Component {
 const validate = (formValues) => {
     const errors = {};
     if(!formValues.title){
-        errors.title = "You must enter a title!"
+        errors.title = "Please enter a title!"
     }
     if(!formValues.difficulty){
-        errors.difficulty = "You must select one!"
+        errors.difficulty = "Please select one!"
     }
     if(!formValues.workload){
-        errors.workload = "You must select one!"
+        errors.workload = "Please select one!"
     }
     if(!formValues.comment){
-        errors.comment = "You must enter a description!"
+        errors.comment = "Please enter a description!"
     }
     return errors;
 };
