@@ -143,7 +143,6 @@ router.get('/getSize', ctx => {
 //get the size of specific data
 router.get('/fetchSize', ctx => {
   return new Promise(resolve => {
-    console.log(ctx.query);
     const sql = `SELECT COUNT(*) AS SIZE FROM test.new_table WHERE test.new_table.title LIKE '%${ctx.query.title}%'`;
     connection.query(sql, (err, result) => {
       if (err) throw err;

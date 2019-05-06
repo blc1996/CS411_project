@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getItems,fetchItems } from '../actions/marketAction';
-import sqlApi from '../api/sqlServer'
 
 class NevigationBar extends React.Component {
     state = ({page: 0,mark:0})
@@ -13,31 +12,19 @@ class NevigationBar extends React.Component {
     //     this.handleNextClick = this.handleNextClick.bind(this);
     //     this.handlePrevClick = this.handlePrevClick.bind(this);
     //   
-        handleNextClick = (title) => {
+        handleNextClick = () => {
             if(this.props.Mark === 0){
-                sqlApi.get(`/getSize`).then(res => {
-                    const tempItem = res.data.data[0] === undefined ? {} : res.data.data[0];
-                    if(this.state.page+4 < tempItem.SIZE){
-                        this.props.getItems(this.state.page + 4);
-                        this.setState({page: this.state.page+4});
-                    }
-                })
-            }
-            else{
-                console.log(title);
-                sqlApi.get(`/fetchSize?title=${title}`).then(res => {
-                    const tempItem = res.data.data[0] === undefined ? {} : res.data.data[0];
-                    console.log(tempItem);
-                    if(this.state.page+4 < tempItem.SIZE){
-                    this.props.fetchItems(this.props.Title, this.state.page - 4);
+                    this.props.getItems(this.state.page + 4);
                     this.setState({page: this.state.page+4});
+                }
+            else{
+                this.props.fetchItems(this.props.Title, this.state.page + 4);
+                this.setState({page: this.state.page+4});
                     }
-                })
-            }
         }
 
         handlePrevClick = () => {
-            if(this.state.page > 0){
+            if(this.state.page >= 4){
                 if(this.props.Mark === 0){
                     this.props.getItems(this.state.page - 4);
                     this.setState({page: this.state.page-4});
@@ -57,13 +44,14 @@ class NevigationBar extends React.Component {
                         <div className="column">
                         <button disabled = {this.state.page === 0}
                                 className="ui labeled icon button"
-                                onClick={this.handlePrevClick(this.props.Title)}>
+                                onClick={this.handlePrevClick}>
                             <i className="left arrow icon"></i>
                             Prev
                         </button>
                         </div>
                         <div className="column">
                         <button 
+                            disabled = {this.state.page +4 >= this.props.Size }
                             style={{position:'absolute',right:'30px'}} 
                             className="ui right labeled icon button"
                             onClick={this.handleNextClick}
@@ -74,7 +62,7 @@ class NevigationBar extends React.Component {
                         </div>
                         </div> 
                         <div className="ui vertical divider">
-                        Page 1
+                        Page {this.state.page/4+1}
                         </div>
                     </div>
                 );
