@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import '../../../node_modules/react-vis/dist/style.css';
 import sqlApi from '../../api/sqlServer';
 import {changeTab} from '../../actions/headerAction';
@@ -348,7 +349,7 @@ class ClassShow extends Component {
         return (
             <div>
                 <h1>{this.state.Subject+this.state.Number}</h1>
-                <a href={`/class/${this.state.id}/addComment`} class="ui blue button">Add a Comment</a>
+                <Link to={`/class/${this.state.id}/addComment`} class="ui blue button">Add a Comment</Link>
                 <div className="ui top attached tabular menu">
                     <a className={`item ${tabs[0]}`} data-tab="GPA" onClick={() => {this.setState({tabState: [1, 0, 0]})}} >GPA</a>
                     <a className={`item ${tabs[1]}`} data-tab="Comments" onClick={() => {this.setState({tabState: [0, 1, 0]})}} >Comments</a>
