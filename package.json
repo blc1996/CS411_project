@@ -6,6 +6,7 @@
     "axios": "^0.18.0",
     "material-ui-filter": "^2.1.13",
     "mqtt": "^2.18.8",
+    "mysql": "^2.17.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-dropzone": "^8.0.3",

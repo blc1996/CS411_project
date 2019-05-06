@@ -41,10 +41,25 @@ export const editItem = (formValue, id) => {
     }
 };
 
-export const fetchItems = (page) => {
-    return async dispatch => {
-        const response = await sqlApi.get("/fetchItems");
 
+export const getItems = (page) => {
+    return async dispatch => {
+        console.log(page);
+        const response = await sqlApi.get(`/getItems?page=${page}`)
+        console.log(response);
+        console.log(response.data.data)
+
+        dispatch({
+            type: "FETCH_MARKET_ITEMS",
+            payload: {data: response.data.data, page: page}
+        })
+    }
+}
+
+export const fetchItems = (title,page) => {
+    return async dispatch => {
+        const response = await sqlApi.get(`/fetchItems?title=${title}&page=${page}`)
+        console.log(response);
         console.log(response.data.data)
 
         dispatch({
