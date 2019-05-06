@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {changeTab} from '../../actions/headerAction';
-import courseapi from '../../api/courseAPI';
-import './ClassMainPage.css'
 import './ClassMainPageShow.css';
 import sqlApi from '../../api/sqlServer';
 
@@ -58,16 +56,14 @@ import {
   
 
 class ClassMainPage extends Component {
+
     state = {
         drawMode: 0,
         data: randomData,
         colorType: 'typeA',
         value: false,
         course: 'CS225',
-        name: 'CS225',
-        recommendCourse: '',
-        professor: "",
-        items: []
+        name: 'CS225'
       };
 
       grades = {
@@ -88,17 +84,22 @@ class ClassMainPage extends Component {
     } //emulated enum for grades
 
       async initialize() {
-        const id =  (this.state.course === null) || (this.state.course === undefined) ? 'CS225' : this.state.course;
+        const id = this.state.course;
         var Subject = id.match(/[a-z|A-Z]+/gi)[0] === null ? "":  id.match(/[a-z|A-Z]+/gi)[0].toUpperCase();
         var Number = id.match(/\d+$/gi) === null ? 0 : id.match(/\d+$/gi)[0];
+        console.log(Subject, Number);
         const response = await sqlApi.get(`/getCourseInfo?Subject=${Subject}&Number=${Number}`);
+        const comments = await sqlApi.get(`/getCourseComment?courseid=${Subject}${Number}`);
+        // console.log(comments);
         const data = response.data.data;
         if(data.length === 0){
             this.setState({loading: 2});
             return;
         }
+        console.log(data);
         const total = this.dataMapping(data); 
         const reFill = this.getData(total);
+        console.log(reFill);
         this.setState({name: id, data: reFill});
     }
 
@@ -222,32 +223,6 @@ class ClassMainPage extends Component {
         console.log(this.props.match.params.id);
         this.props.changeTab(2);
         this.initialize();
-        // this.submit();
-    }
-
-
-    submit = async (event) => {
-        event.preventDefault();
-        // console.log("123")
-        console.log(this.state.recommendCourse)
-        console.log(this.state.professor)
-        // console.log("123")
-        const response = await courseapi.post('/result', {
-            course: this.state.recommendCourse,
-            prof: this.state.professor
-
-            // course: "Railroad Transportation Engrg",
-            // prof: "BarkanChristopherP"
-        })
-        // console.log(response.data)
-        
-        var result = []
-        for (var i in response.data) {
-            // this.state.items.push(i);
-            result.push(response.data[i])
-        }        
-        this.setState({items: result})
-        this.initialize();
     }
 
     componentDidUpdate (){
@@ -273,51 +248,6 @@ class ClassMainPage extends Component {
         const mode = drawModes[drawMode];
         const iconName = 'hand point up';
         return (
-            <div>
-
-            <div>
-                <center> <h1> FIND YOUR RIGHT COURSE </h1> 
-                <form onSubmit={this.submit} class = "recommend">
-                    <label>
-                    <input type="text" name="course" placeholder="Enter Course Name"
-                        value={this.state.recommendCourse}
-                        onChange={(e) => this.setState({ recommendCourse: e.target.value })} 
-                        onClick={(e) => this.setState({ recommendCourse: e.target.value })} />
-                    </label>
-                    <label>
-                    <input type="text" name="prof" placeholder="Enter Professor Name"
-                        value={this.state.professor}
-                        onChange={(e) => this.setState({ professor: e.target.value })} 
-                        onClick={(e) => this.setState({ professor: e.target.value })} />
-                    </label>
-                    
-                    <button class="button">Recommend</button>
-                </form>
-
-
-                <table>
-                  <thead>
-                    <tr>
-                        <th>Course Name</th>
-                        <th>Professor</th>
-                        <th>Couse Number</th>
-                    </tr>
-                  </thead>
-                {this.state.items.map(i => {
-                    return(
-                    <tbody>
-                        <tr>
-                            <td>{i.course}</td>  
-                            <td>{i.professor}</td>  
-                            <td>{i.department}</td>
-                        </tr>
-                    </tbody>
-                        )
-                })}
-                </table>
-                </center>
-            </div>
-
             <div className="canvas-wrapper">
                 <div className="attention-segment">
                 <h3 class="ui block header">
@@ -326,11 +256,11 @@ class ClassMainPage extends Component {
                 </div> 
               <div className = "ui placeholder segment">                  
                 <div className="canvas-example-controls">
-                    <h1>{`${course} Grades Distribution`}</h1>
-                    <button className="ui button primary" onClick={() => this.setState({course: nextCourse[course], colorType: nextType[colorType]})}>
-                    Random   
-                    </button>
-                </div>
+                      <h1>{`${course} Grades Distribution`}</h1>
+                      <button className="ui button primary" onClick={() => this.setState({course: nextCourse[course], colorType: nextType[colorType]})}>
+                      Change     
+                      </button>
+                  </div>
                 <XYPlot
                     xType = "ordinal"
                     onMouseLeave={() => this.setState({value: false})}
@@ -345,11 +275,9 @@ class ClassMainPage extends Component {
                     {mode === 'svg' && <MarkSeries {...markSeriesProps} />}
                     {this.state.value ? <Hint value={this.state.value} /> : null}
                 </XYPlot>
-            </div> 
+              </div> 
             </div>   
-
-        </div>
-        )
+        );
        
     }
 }

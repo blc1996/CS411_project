@@ -1,0 +1,40 @@
+.comment-segment {
+    text-align:center;
+}
+
+.comment-segment h1{
+    text-align:center;
+}
+.value-form { 
+    text-align:center;
+}
+
+.value-form form{ 
+    position: absolute;
+    left: 300px; 
+    width: 500px;
+}
+
+.value-form i{ 
+    position: relative;  
+    top: 100px;
+}
+
+.card-display {
+    display: inline-block;
+    height: 300px;
+    margin-right: 50px;
+    margin-top: 20px;
+}
+
+.content {
+    display: inline-block;
+    height: 250px;
+}
+
+.extra-content {
+    /* display: inline-block; */
+    text-align:center;
+    height: 50px;
+}
+

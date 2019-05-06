@@ -305,7 +305,7 @@ class ClassShow extends Component {
                     <XYPlot
                         xType = "ordinal"
                         data = {this.state.figure}
-                        onMouseLeave={() => this.setState({value: false})}
+                        onMouseLeave={() => this.setState({value: false, colorType: nextType[colorType]})}
                         width={1100}
                         height={500}
                     >
