@@ -56,7 +56,7 @@ router.get('/getItems', ctx => {
     test.new_table.id as id, test.new_table.creater as creater
     FROM test.new_table
     INNER JOIN test.users ON test.new_table.creater=test.users.id
-    ORDER BY test.new_table.id LIMIT ${ctx.query.page},4`;
+    ORDER BY test.new_table.id LIMIT ${ctx.query.page},8`;
     connection.query(sql, (err, result) => {
       if (err) throw err;
       ctx.body = {
@@ -77,7 +77,7 @@ router.get('/getItem', ctx => {
     FROM test.new_table
     INNER JOIN test.users ON test.new_table.creater=test.users.id
     WHERE test.new_table.id = ${ctx.query.id}
-    ORDER BY test.new_table.id LIMIT 0,4`;
+    ORDER BY test.new_table.id LIMIT 0,8`;
     connection.query(sql, (err, result) => {
       if (err) throw err;
       ctx.body = {
@@ -99,7 +99,7 @@ router.get('/fetchItems', ctx => {
     FROM test.new_table
     INNER JOIN test.users ON test.new_table.creater=test.users.id
     WHERE test.new_table.title LIKE '%${ctx.query.title}%'
-    ORDER BY test.new_table.id LIMIT ${ctx.query.page},4`;
+    ORDER BY test.new_table.id LIMIT ${ctx.query.page},8`;
 /*    `SELECT test.new_table.title, test.new_table.price, test.new_table.description,test.new_table.create_time,
     test.users.username
     FROM test.new_table

@@ -14,25 +14,25 @@ class NevigationBar extends React.Component {
     //   
         handleNextClick = () => {
             if(this.props.Mark === 0){
-                    this.props.getItems(this.state.page + 4);
-                    this.setState({page: this.state.page+4});
+                    this.props.getItems(this.state.page + 8);
+                    this.setState({page: this.state.page+8});
                 }
             else{
-                this.props.fetchItems(this.props.Title, this.state.page + 4);
-                this.setState({page: this.state.page+4});
+                this.props.fetchItems(this.props.Title, this.state.page + 8);
+                this.setState({page: this.state.page+8});
                     }
         }
 
         handlePrevClick = () => {
-            if(this.state.page >= 4){
+            if(this.state.page >= 8){
                 if(this.props.Mark === 0){
-                    this.props.getItems(this.state.page - 4);
-                    this.setState({page: this.state.page-4});
+                    this.props.getItems(this.state.page - 8);
+                    this.setState({page: this.state.page-8});
                 }
                 else{
                     console.log(this.props.Title);
-                    this.props.fetchItems(this.props.Title, this.state.page - 4);
-                    this.setState({page: this.state.page-4});
+                    this.props.fetchItems(this.props.Title, this.state.page - 8);
+                    this.setState({page: this.state.page-8});
                 }
             }            
         }
@@ -51,7 +51,7 @@ class NevigationBar extends React.Component {
                         </div>
                         <div className="column">
                         <button 
-                            disabled = {this.state.page +4 >= this.props.Size }
+                            disabled = {this.state.page +8 >= this.props.Size }
                             style={{position:'absolute',right:'30px'}} 
                             className="ui right labeled icon button"
                             onClick={this.handleNextClick}
@@ -62,7 +62,7 @@ class NevigationBar extends React.Component {
                         </div>
                         </div> 
                         <div className="ui vertical divider">
-                        Page {this.state.page/4+1}
+                        Page {this.state.page/8+1}
                         </div>
                     </div>
                 );
