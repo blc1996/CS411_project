@@ -1,0 +1,25 @@
+.top-right {
+    position: absolute;
+    top: 110px;
+    right: 160px;
+}
+
+.canvas-example-controls{
+    text-align:center;
+}
+
+.attention-segment{
+    text-align:center;
+    /* height: 100px; */
+}
+
+
+.canvas-example-controls button {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 4px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
