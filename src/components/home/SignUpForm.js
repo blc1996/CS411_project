@@ -42,15 +42,33 @@ class SignUpForm extends React.Component {
     } 
 };
 
+function isRegisterUserName(s)  {  
+    var patrn=/^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){4,19}$/;  
+    if (!patrn.exec(s)) return false
+    return true
+}
+
+function isPasswd(s)  {  
+    var patrn=/^(\w){6,20}$/;  
+    if (!patrn.exec(s)) return false
+    return true
+}
+
+function isEmail(s)  {  
+    var patrn=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;  
+    if (!patrn.exec(s)) return false
+    return true
+}
+
 const validate = (formValues) => {
     const errors = {};
-    if(!formValues.UserName){
-        errors.UserName = "You must enter a user name!"
+    if(!formValues.UserName || !isRegisterUserName(formValues.UserName)){
+        errors.UserName = "Username must start with charaters, [5, 19] long"
     }
-    if(!formValues.Password){
-        errors.Password = "Invalid Password"
+    if(!formValues.Password || !isPasswd(formValues.Password)){
+        errors.Password = "Password must be [6, 20] long"
     }
-    if(!formValues.email){
+    if(!formValues.email || !isEmail(formValues.email)){
         errors.email = "You must enter a email!"
     }
     return errors;
