@@ -18,7 +18,7 @@ class MarketDelete extends React.Component {
                     onClick={() => {this.props.deleteItem(this.id); history.goBack()}}
                     className="ui primary button" 
                 >
-                    Delete
+                    Deletefe
                 </button>
                 <button 
                     onClick={() => history.push('/market')} 

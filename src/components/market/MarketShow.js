@@ -12,14 +12,13 @@ class MarketShow extends React.Component {
     componentDidMount () {
         const id = history.location.pathname.split('/')[3];
         this.props.changeTab(1);
-        sql.get(`/fetchItem?id=${id}`).then(res => {
+        sql.get(`/getItem?id=${id}`).then(res => {
             const tempItem = res.data.data[0] === undefined ? {} : res.data.data[0];
             this.setState({item: tempItem})
         })
     }
 
     render () {
-        console.log(this.state)
         return (
             <div>
                 <div className="ui segment">
@@ -28,8 +27,8 @@ class MarketShow extends React.Component {
                 <p>price: {this.state.item.price}</p>
                 <p>description: {this.state.item.description}</p>
                 <p>Post date: {this.state.item.create_time}</p>
-                <p>User: {this.state.item.title}</p>
-                <p>E-mail: {this.state.item.title}</p>
+                <p>User: {this.state.item.username}</p>
+                <p>E-mail: {this.state.item.email}</p>
                 </div>
             </div>
         );

@@ -29,16 +29,6 @@ connection.query("SELECT MAX(id) FROM test.new_table", (err, result) => {
   console.log("Market Id starting from: ", current_max_item_id);
 })
 
-var max_userID = 90000000000;
-connection.query(`SELECT MAX(id) FROM test.users`, (err, result) => {
-  if(err) throw err;
-  max_userID = result['0']['MAX(id)'];
-  console.log(max_userID)
-  max_userID = Number(max_userID.slice(10, 21));
-  console.log(max_userID)
-})
-
-
 router.get('/', ctx => {
   console.log(ctx)
   ctx.body = 'Visit index';
@@ -47,11 +37,65 @@ router.get('/', ctx => {
 /***************************************
     Market Segment
 ***************************************/
+// get the whole market table
+router.get('/getItems', ctx => {
+  return new Promise(resolve => {
+    console.log(ctx.query.page);
+    const sql = `SELECT test.new_table.title as title, test.new_table.price as price, 
+    test.new_table.description as description,test.new_table.create_time as create_time,
+    test.users.username as username,test.users.email as email,test.new_table.image as image,
+    test.new_table.id as id, test.new_table.creater as creater
+    FROM test.new_table
+    INNER JOIN test.users ON test.new_table.creater=test.users.id
+    ORDER BY test.new_table.id LIMIT ${ctx.query.page},4`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      ctx.body = {
+        code: 200,
+        data: result
+      }
+      resolve();
+    })
+  })
+})
 
-// get the whole market table, modify name later
+router.get('/getItem', ctx => {
+  return new Promise(resolve => {
+    const sql = `SELECT test.new_table.title as title, test.new_table.price as price, 
+    test.new_table.description as description,test.new_table.create_time as create_time,
+    test.users.username as username,test.users.email as email,test.new_table.image as image,
+    test.new_table.id as id, test.new_table.creater as creater
+    FROM test.new_table
+    INNER JOIN test.users ON test.new_table.creater=test.users.id
+    WHERE test.new_table.id = ${ctx.query.id}
+    ORDER BY test.new_table.id LIMIT 0,4`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      ctx.body = {
+        code: 200,
+        data: result
+      }
+      resolve();
+    })
+  })
+})
+
+// get specific market table, modify name later
 router.get('/fetchItems', ctx => {
   return new Promise(resolve => {
-    const sql = `SELECT * FROM test.new_table`;
+    const sql =`SELECT test.new_table.title as title, test.new_table.price as price, 
+    test.new_table.description as description,test.new_table.create_time as create_time,
+    test.users.username as username,test.users.email as email,test.new_table.image as image,
+    test.new_table.id as id, test.new_table.creater as creater
+    FROM test.new_table
+    INNER JOIN test.users ON test.new_table.creater=test.users.id
+    WHERE test.new_table.title LIKE '%${ctx.query.title}%'
+    ORDER BY test.new_table.id LIMIT ${ctx.query.page},4`;
+/*    `SELECT test.new_table.title, test.new_table.price, test.new_table.description,test.new_table.create_time,
+    test.users.username
+    FROM test.new_table
+    INNER JOIN test.users ON test.new_table.creater=test.users.id
+*/  
     connection.query(sql, (err, result) => {
       if (err) throw err;
       ctx.body = {
@@ -66,7 +110,44 @@ router.get('/fetchItems', ctx => {
 // get all items posted by a user
 router.get('/fetchUserItems', ctx => {
   return new Promise(resolve => {
-    const sql = `SELECT * FROM test.new_table WHERE creater = ${ctx.query.id}`;
+    const sql = `SELECT test.new_table.title as title, test.new_table.price as price, 
+    test.new_table.description as description,test.new_table.create_time as create_time,
+    test.users.username as username,test.users.email as email,test.new_table.image as image,
+    test.new_table.id as id, test.new_table.creater as creater
+    FROM test.new_table
+    INNER JOIN test.users ON test.new_table.creater=test.users.id
+    WHERE test.new_table.id = ${ctx.query.id} AND test.new_table.title LIKE '%${ctx.query.title}%'`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      ctx.body = {
+        code: 200,
+        data: result
+      }
+      resolve();
+    })
+  })
+})
+
+//get the size of data
+router.get('/getSize', ctx => {
+  return new Promise(resolve => {
+    const sql = `SELECT COUNT(*) AS SIZE FROM test.new_table`
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      ctx.body = {
+        code: 200,
+        data: result
+      }
+      resolve();
+    })
+  })
+})
+
+//get the size of specific data
+router.get('/fetchSize', ctx => {
+  return new Promise(resolve => {
+    console.log(ctx.query);
+    const sql = `SELECT COUNT(*) AS SIZE FROM test.new_table WHERE test.new_table.title LIKE '%${ctx.query.title}%'`;
     connection.query(sql, (err, result) => {
       if (err) throw err;
       ctx.body = {

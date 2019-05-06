@@ -62,7 +62,7 @@ class ChatList extends React.Component {
             this.getChatList();
         }
         return this.props.imSystem.chatList.map(chat => {
-            if(chat === undefined){
+            if(chat === undefined || chat === null){
                 return;
             }
             return (

@@ -15,12 +15,12 @@ class ClassCommentCreate extends React.Component {
     }
 
     onSubmit = async (formValues, userId) => {
-        console.log(userId);
+//        console.log(this.props);
         if(userId === undefined){
             userId = "Anounymous"
         }
         const response = await sqlApi.post(`/insertComment?user=${userId}&courseid=${this.state.id}&time=today&difficulty=${formValues.difficulty}&workload=${formValues.workload}&title=${formValues.title}&comment=${formValues.comment}`);
-        console.log(response);
+//        console.log(response);
         history.push(`/class/${this.state.id}`);
     }
 
