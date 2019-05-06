@@ -2,6 +2,7 @@ import React from 'react';
 import ClassCommentForm from './ClassCommentForm';
 import sqlApi from '../../api/sqlServer';
 import history from '../../history';
+import './ClassComment.css';
 
 
 class ClassCommentCreate extends React.Component {
@@ -15,7 +16,6 @@ class ClassCommentCreate extends React.Component {
     }
 
     onSubmit = async (formValues, userId) => {
-//        console.log(this.props);
         if(userId === undefined){
             userId = "Anounymous"
         }
@@ -26,7 +26,7 @@ class ClassCommentCreate extends React.Component {
 
     render () {
         return (
-            <div>
+            <div className = "comment-segment">
                 <h1>{`Create a comment for ${this.state.id}`}</h1>
                 <ClassCommentForm onSubmit={this.onSubmit} />
             </div>

@@ -73,7 +73,7 @@ class Header extends React.Component {
                     className={this.props.tabs[2]}
                     onClick={() => {this.props.changeTab(2)}}
                 >
-                    Classes
+                    Courses
                 </Link>
                 <Link to="/chat"
                     className={this.props.tabs[3]}

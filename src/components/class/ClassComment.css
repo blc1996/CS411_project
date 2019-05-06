@@ -1,0 +1,23 @@
+.comment-segment {
+    text-align:center;
+}
+
+.comment-segment h1{
+    text-align:center;
+}
+.value-form { 
+    text-align:center;
+}
+
+.value-form form{ 
+    position: absolute;
+    left: 300px; 
+    width: 500px;
+}
+
+.value-form i{ 
+    position: relative;  
+    top: 100px;
+}
+
+
